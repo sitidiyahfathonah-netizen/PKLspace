@@ -12,8 +12,8 @@ export const NavLink = ({ href, label, isActive = false }: NavLinkProps) => {
   return (
     <Link
       href={href}
-      className={`relative py-1 text-sm font-medium transition-colors hover:text-white ${
-        isActive ? 'text-white' : 'text-gray-300'
+      className={`relative py-1 text-sm font-semibold transition-colors hover:text-white ${
+        isActive ? 'text-blue-300' : 'text-gray-300'
       }`}
     >
       {label}
