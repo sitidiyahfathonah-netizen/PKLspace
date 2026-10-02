@@ -1,13 +1,16 @@
-interface InputProps {
-  placeholder?: string;
-  value?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+import React, { InputHTMLAttributes } from 'react';
+
+// Menggunakan React.InputHTMLAttributes agar mendukung semua props input bawaan HTML
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  className?: string;
 }
 
 export const Input = ({
   placeholder,
   value,
   onChange,
+  className = '',
+  ...props
 }: InputProps) => {
   return (
     <input
@@ -15,7 +18,10 @@ export const Input = ({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+      className={`w-full rounded-xl bg-[#dbe2ea] px-5 py-3 text-sm text-slate-800 placeholder-slate-500 outline-none transition focus:ring-2 focus:ring-blue-400 ${className}`}
+      {...props}
     />
   );
 };
+
+export default Input;
