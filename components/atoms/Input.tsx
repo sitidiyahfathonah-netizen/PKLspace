@@ -18,7 +18,7 @@ export const Input = ({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className={`w-full rounded-xl bg-[#dbe2ea] px-5 py-3 text-sm text-slate-800 placeholder-slate-500 outline-none transition focus:ring-2 focus:ring-blue-400 ${className}`}
+      className={`w-full rounded-xl bg-[#dbe2ea] px-10 py-4 text-sm text-black placeholder-slate-500 outline-none transition focus:ring-2 focus:ring-blue-400 ${className}`}
       {...props}
     />
   );
