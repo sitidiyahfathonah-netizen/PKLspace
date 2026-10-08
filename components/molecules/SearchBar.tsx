@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
-import { Input } from '@/components/atoms/Input';
+import Input from '@/components/atoms/Input';
 
 interface SearchBarProps {
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSearch?: () => void;
   onFilterClick?: () => void;
+  placeholder?: string;
 }
 
 export const SearchBar = ({
@@ -15,15 +15,26 @@ export const SearchBar = ({
   onChange,
   onSearch,
   onFilterClick,
+  placeholder = 'Cari berdasarkan nama instansi atau industri...',
 }: SearchBarProps) => {
   return (
-    <div className="flex items-center gap-3 w-full max-w-4xl">
-      {/* 1. Kotak Ikon Kaca Pembesar (Kiri) */}
+    <div className="flex w-full max-w-3xl items-center gap-2">
+      {/* 1. Input Teks (Di Sebelah Kiri) */}
+      <div className="flex-1">
+        <Input
+          type="text"
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+        />
+      </div>
+
+      {/* 2. Tombol Kaca Pembesar (Di Tengah - Antara Input dan Filter) */}
       <button
         type="button"
         onClick={onSearch}
         aria-label="Cari"
-        className="flex h-12 w-14 items-center justify-center rounded-xl bg-[#dbe2ea] text-slate-700 transition hover:bg-[#cbd5e1] shrink-0"
+        className="flex h-12 w-14 shrink-0 items-center justify-center rounded-xl bg-gray-300 text-black transition hover:bg-[#cbd5e1]"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -41,21 +52,11 @@ export const SearchBar = ({
         </svg>
       </button>
 
-      {/* 2. Input Teks (Tengah) */}
-      <div className="flex-1">
-        <Input
-          placeholder="cari tempat pkl...."
-          value={value}
-          onChange={onChange}
-          className="h-12"
-        />
-      </div>
-
-      {/* 3. Tombol Filter (Kanan) */}
+      {/* 3. Tombol Filter (Di Sebelah Kanan) */}
       <button
         type="button"
         onClick={onFilterClick}
-        className="flex h-12 items-center gap-2 rounded-xl bg-[#dbe2ea] px-5 text-sm font-medium text-slate-700 transition hover:bg-[#cbd5e1] shrink-0"
+        className="flex h-12 items-center gap-2 rounded-xl bg-[#dbe2ea] px-4 text-sm font-medium text-slate-700 transition hover:bg-[#cbd5e1] shrink-0"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
