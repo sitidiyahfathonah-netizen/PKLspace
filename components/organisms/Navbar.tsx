@@ -4,7 +4,7 @@ import { NavMenu, NavItem } from '../molecules/NavMenu';
 const NAV_ITEMS: NavItem[] = [
   { label: 'Beranda', href: '/' },
   { label: 'Katalog', href: '/katalog' },
-  { label: 'Tentang', href: '/tentang' },
+  { label: 'Tentang', href: '/About' },
 ];
 
 export const Navbar = () => {
