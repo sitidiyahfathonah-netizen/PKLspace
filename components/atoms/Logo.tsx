@@ -1,28 +1,29 @@
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
 
 interface LogoProps {
   href?: string;
   className?: string;
 }
 
-export const Logo = ({ href = '/', className = '' }: LogoProps) => {
+export const Logo = ({ href = "/", className = "" }: LogoProps) => {
   return (
-    <Link href={href} className={`flex items-center gap-2 group ${className}`}>
-      {/* 
-        Ukuran div dibuat proporsional (h-16 w-20) agar ikon koper membesar 
-        seperti di Figma tanpa membuat jarak ke teks terlalu jauh.
-      */}
-      <div className="relative h-30 w-50 sm:h-20 sm:w-24 shrink-0 -my-3">
+    <Link
+      href={href}
+      className={`group flex shrink-0 items-center gap-1 sm:gap-2 ${className}`}
+    >
+      <div className="relative -my-2 h-16 w-20 shrink-0 sm:-my-3 sm:h-20 sm:w-24">
         <Image
           src="/img/Logo PKLspace.png"
           alt="PKLspace Logo"
           fill
-          className="object-contain transition-transform "
+          sizes="(max-width: 640px) 80px, 96px"
+          className="object-contain transition-transform"
           priority
         />
       </div>
-      <span className="text-2xl font-bold text-blue-300 tracking-wide transition-colors">
+
+      <span className="whitespace-nowrap text-xl font-bold tracking-wide text-blue-300 transition-colors sm:text-2xl">
         PKLspace
       </span>
     </Link>
