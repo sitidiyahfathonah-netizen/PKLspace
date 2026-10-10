@@ -33,26 +33,23 @@ const companies = [
   // AKL
   {
     id: 4,
-    name: "Bank BJB",
+    name: "BJB Bank Branch Sumedang",
     logo: "/img/BANK BJB.jpeg",
-    description:
-      "Tempat PKL di bidang perbankan dan pengelolaan keuangan.",
+    description: "Perbankan",
     major: "Akuntansi dan Keuangan Lembaga",
   },
   {
     id: 5,
-    name: "Bank Mandiri Taspen",
+    name: "Bank mandiri taspen",
     logo: "/img/mandiri-taspen.jpeg",
-    description:
-      "Tempat PKL di bidang perbankan dan administrasi keuangan.",
+    description: "Perbankan",
     major: "Akuntansi dan Keuangan Lembaga",
   },
   {
     id: 6,
     name: "BPR Cimalaka",
     logo: "/img/BPR Cimalaka.jpeg",
-    description:
-      "Tempat PKL di bidang perbankan dan pencatatan keuangan.",
+    description: "Perbankan",
     major: "Akuntansi dan Keuangan Lembaga",
   },
 
@@ -110,27 +107,30 @@ const companies = [
 
 const HomeTemplate = () => {
   return (
-    <div className="min-h-screen bg-white">
-
-      {/* SCROLL 1 */}
-      <section className="flex min-h-[calc(100vh-80px)] flex-col">
-        <div className="h-1/2 min-h-0">
+    <div className="w-full bg-white">
+      {/* Tampilan Pertama (1 Layar Desktop): Hero (50%) + TipsBanner (50%) */}
+      <section className="flex flex-col md:h-[calc(100vh-76px)] md:max-h-[calc(100vh-76px)]">
+        {/* Bagian Atas: Hero (50%) */}
+        <div className="w-full md:h-1/2 md:min-h-0">
           <Hero />
         </div>
 
-        <div className="h-1/2 min-h-0">
+        {/* Bagian Bawah: TipsBanner (50%) */}
+        <div className="w-full md:h-1/2 md:min-h-0">
           <TipsBanner />
         </div>
       </section>
 
-      {/* Bagian tampilan kedua */}
-      <section className="min-h-screen">
+      {/* Tampilan Kedua (1 Layar Desktop): Rekomendasi */}
+      <section className="flex min-h-screen w-full flex-col justify-center md:min-h-[calc(100vh-76px)]">
         <Recommendation companies={companies} />
       </section>
 
+      {/* Footer */}
       <Footer />
     </div>
   );
 };
 
 export default HomeTemplate;
+
