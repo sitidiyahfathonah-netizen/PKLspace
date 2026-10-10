@@ -113,8 +113,10 @@ const CatalogTemplate = () => {
               {companiesData.map((company) => (
                 <div
                   key={company.id}
-                  className="[&>article]:w-full">
+                  className="[&>article]:w-full"
+                >
                   <CompanyCard
+                    id={company.id}
                     name={company.name}
                     logo={company.logo}
                     description={company.description}
