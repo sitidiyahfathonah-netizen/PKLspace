@@ -27,7 +27,7 @@ export const Button = ({
 
   const variants = {
     // Varian 'dark': Tombol "Jelajahi" di Hero Figma (Biru-Ungu Peat)
-    dark: 'bg-[#181838] text-white hover:bg-[#252552]',
+    dark: 'bg-indigo-950 text-white hover:bg-[#252552]',
     // Varian 'primary': Biru standar
     primary: 'bg-blue-600 text-white hover:bg-blue-700',
     // Varian 'secondary': Abu-abu terang / Putih
