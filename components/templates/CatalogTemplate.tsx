@@ -63,27 +63,37 @@ const CatalogTemplate = () => {
             </div>
           ) : companiesData.length > 0 ? (
             <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
+
               {companiesData.map((company) => {
-  const logoUrl = getStrapiMediaUrl(company.logo?.url);
+                const logoUrl = getStrapiMediaUrl(company.logo?.url);
 
-  // Ambil langsung dari field jurusan_utama response backend
-  const mainMajor = company.jurusan_utama || company.jurusan_diterima?.[0] || "-";
+                const mainMajor =
+                  company.jurusan_utama ||
+                  company.jurusan_diterima?.[0] ||
+                  '-';
 
-  // Kategori singkat di bawah nama perusahaan (contoh: Software House & UI/UX)
-  const categoryDescription = company.bidang?.nama || company.kategori?.nama || "Perusahaan / Instansi";
+                const categoryDescription =
+                  company.bidang?.nama ||
+                  company.kategori?.nama ||
+                  'Perusahaan / Instansi';
 
-  return (
-    <div key={company.id} className="[&>article]:w-full">
-      <CompanyCard
-        name={company.nama}
-        logo={logoUrl}
-        description={categoryDescription}
-        major={mainMajor} // Hanya menampilkan 1 jurusan utama di kartu katalog
-        slug={company.slug}
-      />
-    </div>
-  );
-})}
+                return (
+                  <div
+                    key={company.id}
+                    className="[&>article]:w-full"
+                  >
+                    <CompanyCard
+                      id={company.id}
+                      name={company.nama}
+                      logo={logoUrl}
+                      description={categoryDescription}
+                      major={mainMajor}
+                      slug={company.slug}
+                    />
+                  </div>
+                );
+              })}
+
             </div>
           ) : (
             <div className="flex min-h-[300px] items-center justify-center">
