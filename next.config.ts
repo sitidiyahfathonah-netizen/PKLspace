@@ -1,7 +1,13 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextMode} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'pkl-space-backend-production.up.railway.app',
+      },
+    ],
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

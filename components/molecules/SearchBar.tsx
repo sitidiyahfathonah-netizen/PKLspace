@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import Input from '@/components/atoms/Input';
 
 interface SearchBarProps {
@@ -15,32 +16,40 @@ export const SearchBar = ({
   onChange,
   onSearch,
   onFilterClick,
-  placeholder = 'Cari berdasarkan nama instansi atau industri...',
+  placeholder = 'cari tempat pkl....',
 }: SearchBarProps) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch?.();
+  };
+
   return (
-    <div className="flex w-full max-w-3xl items-center gap-2">
+    <form
+      onSubmit={handleSubmit}
+      className="flex w-full items-center gap-2 sm:gap-3"
+    >
       {/* 1. Input Teks (Di Sebelah Kiri) */}
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         <Input
           type="text"
           value={value}
           onChange={onChange}
+          onEnter={onSearch}
           placeholder={placeholder}
         />
       </div>
 
       {/* 2. Tombol Kaca Pembesar (Di Tengah - Antara Input dan Filter) */}
       <button
-        type="button"
-        onClick={onSearch}
+        type="submit"
         aria-label="Cari"
-        className="flex h-12 w-14 shrink-0 items-center justify-center rounded-xl bg-gray-300 text-black transition hover:bg-[#cbd5e1]"
+        className="flex h-11 w-12 sm:h-12 sm:w-14 shrink-0 items-center justify-center rounded-xl bg-[#181838] text-white transition hover:bg-[#252554] active:scale-95 shadow-sm cursor-pointer"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          strokeWidth={1.8}
+          strokeWidth={2}
           stroke="currentColor"
           className="h-5 w-5"
         >
@@ -56,7 +65,7 @@ export const SearchBar = ({
       <button
         type="button"
         onClick={onFilterClick}
-        className="flex h-12 items-center gap-2 rounded-xl bg-[#dbe2ea] px-4 text-sm font-medium text-slate-700 transition hover:bg-[#cbd5e1] shrink-0"
+        className="flex h-11 sm:h-12 items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 sm:px-5 text-sm font-medium text-slate-800 transition hover:bg-slate-50 active:scale-95 shrink-0 shadow-sm cursor-pointer"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +73,7 @@ export const SearchBar = ({
           viewBox="0 0 24 24"
           strokeWidth={1.8}
           stroke="currentColor"
-          className="h-5 w-5"
+          className="h-4 w-4 text-slate-800"
         >
           <path
             strokeLinecap="round"
@@ -74,7 +83,7 @@ export const SearchBar = ({
         </svg>
         <span>Filter</span>
       </button>
-    </div>
+    </form>
   );
 };
 

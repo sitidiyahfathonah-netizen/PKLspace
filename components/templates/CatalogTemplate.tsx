@@ -5,94 +5,43 @@ import { useSearchParams } from "next/navigation";
 import SearchFilter from "../organisms/SearchFilter";
 import CompanyCard from "../organisms/CompanyCard";
 import Footer from "../organisms/Footer";
-
-const companies = [
-  {
-    id: 1,
-    name: "PT. Sawala Technology",
-    logo: "/img/Sawala.webp",
-    description: "Software House & UI/UX",
-    major: "Pengembangan Perangkat Lunak dan Gim",
-  },
-  {
-    id: 2,
-    name: "PT. Global Edutipa Informatika",
-    logo: "/img/EDUTIPA.jpeg",
-    description: "Software House & UI/UX",
-    major: "Pengembangan Perangkat Lunak dan Gim",
-  },
-  {
-    id: 3,
-    name: "BJB Bank Branch Sumedang",
-    logo: "/img/BANK BJB.jpeg",
-    description: "Perbankan",
-    major: "Akuntansi dan Keuangan Lembaga",
-  },
-  {
-    id: 4,
-    name: "Bank Mandiri Taspen",
-    logo: "/img/mandiri-taspen.jpeg",
-    description: "Perbankan",
-    major: "Akuntansi dan Keuangan Lembaga",
-  },
-  {
-    id: 5,
-    name: "Dinas Pendidikan",
-    logo: "/img/dinas-pendidikan.jpeg",
-    description: "Administrasi dan pelayanan",
-    major: "Manajemen Perkantoran dan Layanan Bisnis",
-  },
-  {
-    id: 6,
-    name: "Dinas Arsip dan Perpustakaan",
-    logo: "/img/dinas arsip perpus.jpeg",
-    description: "Administrasi dan kearsipan",
-    major: "Manajemen Perkantoran dan Layanan Bisnis",
-  },
-  {
-    id: 7,
-    name: "Plaza Asia Sumedang",
-    logo: "/img/Asia Plaza.jpeg",
-    description: "Retail dan pelayanan pelanggan",
-    major: "Pemasaran",
-  },
-  {
-    id: 8,
-    name: "Griya Plaza Sumedang",
-    logo: "/img/Griya.jpeg",
-    description: "Retail dan pelayanan pelanggan",
-    major: "Pemasaran",
-  },
-];
+import { getCompanies, getStrapiMediaUrl } from "@/lib/api";
+import type { Company } from "@/types/company";
 
 const CatalogTemplate = () => {
   const searchParams = useSearchParams();
 
   const initialMajor = searchParams.get("jurusan") || "";
 
-  const [companiesData, setCompaniesData] = useState(companies);
+  const [companiesData, setCompaniesData] = useState<Company[]>([]);
   const [keyword, setKeyword] = useState("");
   const [selectedMajor, setSelectedMajor] = useState(initialMajor);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Mengikuti perubahan jurusan dari URL
   useEffect(() => {
     setSelectedMajor(searchParams.get("jurusan") || "");
   }, [searchParams]);
 
-  // Search dan filter yang sudah ada
+  // Fetch data dari backend Strapi setiap kali keyword atau selectedMajor berubah
   useEffect(() => {
-    const result = companies.filter((company) => {
-      const matchKeyword = company.name
-        .toLowerCase()
-        .includes(keyword.toLowerCase());
+    const fetchCatalogData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getCompanies({
+          search: keyword,
+          jurusan: selectedMajor,
+        });
+        setCompaniesData(data || []);
+      } catch (error) {
+        console.error("Gagal memuat katalog perusahaan:", error);
+        setCompaniesData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-      const matchMajor =
-        selectedMajor === "" || company.major === selectedMajor;
-
-      return matchKeyword && matchMajor;
-    });
-
-    setCompaniesData(result);
+    fetchCatalogData();
   }, [keyword, selectedMajor]);
 
   return (
@@ -108,20 +57,33 @@ const CatalogTemplate = () => {
             Daftar Tempat PKL
           </h1>
 
-          {companiesData.length > 0 ? (
+          {isLoading ? (
+            <div className="flex min-h-[300px] items-center justify-center">
+              <p className="text-base text-[#7A7F8C]">Memuat tempat PKL...</p>
+            </div>
+          ) : companiesData.length > 0 ? (
             <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
-              {companiesData.map((company) => (
-                <div
-                  key={company.id}
-                  className="[&>article]:w-full">
-                  <CompanyCard
-                    name={company.name}
-                    logo={company.logo}
-                    description={company.description}
-                    major={company.major}
-                  />
-                </div>
-              ))}
+              {companiesData.map((company) => {
+  const logoUrl = getStrapiMediaUrl(company.logo?.url);
+
+  // Ambil langsung dari field jurusan_utama response backend
+  const mainMajor = company.jurusan_utama || company.jurusan_diterima?.[0] || "-";
+
+  // Kategori singkat di bawah nama perusahaan (contoh: Software House & UI/UX)
+  const categoryDescription = company.bidang?.nama || company.kategori?.nama || "Perusahaan / Instansi";
+
+  return (
+    <div key={company.id} className="[&>article]:w-full">
+      <CompanyCard
+        name={company.nama}
+        logo={logoUrl}
+        description={categoryDescription}
+        major={mainMajor} // Hanya menampilkan 1 jurusan utama di kartu katalog
+        slug={company.slug}
+      />
+    </div>
+  );
+})}
             </div>
           ) : (
             <div className="flex min-h-[300px] items-center justify-center">

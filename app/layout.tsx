@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/organisms/Navbar";
 
-// Impor font Inter dari Google Fonts bawaan Next.js
+// Impor font Inter
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+});
+
+// Impor font Poppins
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
 });
 
 export const metadata: Metadata = {
@@ -22,7 +29,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} h-full antialiased`}
+      className={`${inter.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className={`${inter.className} min-h-full flex flex-col bg-slate-900 text-white`}>
         {/* Panggil komponen Navbar di sini agar muncul di semua halaman */}
