@@ -101,8 +101,7 @@ export const Navbar = () => {
       <aside
         className={`fixed left-3 top-3 bottom-3 z-50 flex w-[260px] max-w-[calc(100vw-24px)] flex-col justify-between rounded-3xl bg-[#161942] p-4 text-white shadow-2xl transition-transform duration-300 ease-in-out md:hidden ${
           sidebarOpen ? "translate-x-0" : "-translate-x-[120%]"
-        }`}
-      >
+        }`}>
         <div>
           {/* Sidebar header */}
           <div className="flex items-center justify-between border-b border-white/10 px-1 pb-3 pt-1">
@@ -134,8 +133,7 @@ export const Navbar = () => {
                         isActive
                           ? "bg-[#282F63] text-white shadow-sm border-l-4 border-[#3862FA]"
                           : "text-[#A2AFD3] hover:bg-white/5 hover:text-white"
-                      }`}
-                    >
+                      }`}>
                       <IconComponent className="h-5 w-5 shrink-0" />
                       <span>{item.label}</span>
                     </Link>
