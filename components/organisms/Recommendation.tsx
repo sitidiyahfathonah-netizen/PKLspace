@@ -285,8 +285,7 @@ const Recommendation = ({ companies }: RecommendationProps) => {
                 isZoomed
                   ? "scale-100 opacity-100 shadow-md sm:scale-100 sm:opacity-100 sm:shadow-none"
                   : "scale-[0.93] opacity-80 sm:scale-100 sm:opacity-100"
-              }`}
-          >
+              }`}>
             <CompanyCard
               id={company.id}
               name={company.name}
@@ -301,12 +300,10 @@ const Recommendation = ({ companies }: RecommendationProps) => {
       {/* Panah Lihat Semua di akhir carousel */}
       <div
         data-card-index={recommendedCompanies.length}
-        className="flex shrink-0 snap-center items-center pr-4 sm:snap-align-none sm:pr-6"
-      >
+        className="flex shrink-0 snap-center items-center pr-4 sm:snap-align-none sm:pr-6">
         <Link
           href={`/katalog?jurusan=${encodeURIComponent(selectedMajor)}`}
-          className="flex h-[280px] w-[80px] shrink-0 flex-col items-center justify-center gap-2 text-center text-xs font-semibold text-[#31559F] hover:text-[#243B82] sm:h-[350px] sm:w-[120px] sm:text-sm"
-        >
+          className="flex h-[280px] w-[80px] shrink-0 flex-col items-center justify-center gap-2 text-center text-xs font-semibold text-[#31559F] hover:text-[#243B82] sm:h-[350px] sm:w-[120px] sm:text-sm">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-xl shadow-md transition-transform duration-200 hover:scale-110 sm:h-10 sm:w-10 sm:text-2xl">
             →
           </span>
