@@ -36,8 +36,9 @@ const tips = [
   },
 ];
 
-function TipIcon({ type }: { type: string }) {
-  const iconClasses = 'h-10 w-10 sm:h-11 sm:w-11 lg:h-12 lg:w-12 xl:h-14 xl:w-14 shrink-0';
+function TipIcon({ type, className }: { type: string; className?: string }) {
+  const defaultClasses = 'h-10 w-10 sm:h-11 sm:w-11 lg:h-12 lg:w-12 xl:h-14 xl:w-14 shrink-0';
+  const iconClasses = className ?? defaultClasses;
 
   if (type === 'pencil') {
     return (
@@ -122,11 +123,9 @@ function TipCardDesktop({ tip }: { tip: (typeof tips)[number] }) {
 function TipCardMobile({ tip }: { tip: (typeof tips)[number] }) {
   return (
     <article className="flex h-full w-full items-center rounded-xl border-[1.8px] border-[#211B55] bg-[#DCE9FC] px-3.5 py-2.5 text-[#211B55] sm:px-4 sm:py-3">
-      {/* Nomor urut */}
-      <div className="flex w-11 shrink-0 items-center justify-center sm:w-14">
-        <span className="text-4xl font-extrabold leading-none text-[#211B55] sm:text-5xl">
-          {tip.number}
-        </span>
+      {/* Ikon di pinggir */}
+      <div className="flex w-12 shrink-0 items-center justify-center text-[#211B55] sm:w-14">
+        <TipIcon type={tip.icon} className="h-11 w-11 shrink-0 sm:h-12 sm:w-12" />
       </div>
 
       {/* Garis pemisah vertikal */}
