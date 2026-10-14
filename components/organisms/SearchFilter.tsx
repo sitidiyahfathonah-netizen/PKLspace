@@ -63,7 +63,7 @@ const SearchFilter = ({
   return (
     <>
       {/* Search */}
-      <section className="w-full bg-white px-6 py-8">
+      <section className="w-full bg-white px-4 sm:px-6 pt-5 pb-4 sm:pt-8 sm:pb-6">
         <div className="mx-auto max-w-[1200px]">
           <SearchBar
             value={keyword}
