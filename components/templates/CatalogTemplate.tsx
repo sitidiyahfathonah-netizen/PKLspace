@@ -44,6 +44,29 @@ const CatalogTemplate = () => {
     fetchCatalogData();
   }, [keyword, selectedMajor]);
 
+  // Helper untuk menentukan label judul dinamis sesuai Figma
+  const getCatalogTitle = () => {
+    if (!selectedMajor || selectedMajor === "") {
+      return "Daftar Tempat PKL";
+    }
+
+    const lower = selectedMajor.toLowerCase();
+    if (lower.includes("akuntansi") || lower === "akl") {
+      return "Daftar Tempat PKL Jurusan AKL";
+    }
+    if (lower.includes("manajemen perkantoran") || lower === "mplb") {
+      return "Daftar Tempat PKL Jurusan MPLB";
+    }
+    if (lower.includes("pemasaran") || lower === "pm") {
+      return "Daftar Tempat PKL Jurusan PM";
+    }
+    if (lower.includes("pengembangan perangkat lunak") || lower.includes("gim") || lower === "pplg") {
+      return "Daftar Tempat PKL Jurusan PPLG";
+    }
+
+    return `Daftar Tempat PKL Jurusan ${selectedMajor}`;
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <SearchFilter
@@ -51,10 +74,11 @@ const CatalogTemplate = () => {
         onSearch={(value) => setKeyword(value)}
         onFilter={(major) => setSelectedMajor(major)}
       />
-      <section className="px-6 pb-12">
+      <section className="px-4 sm:px-6 pb-12">
         <div className="mx-auto max-w-[1200px]">
-          <h1 className="mb-10 text-2xl font-bold text-[#211B55]">
-            Daftar Tempat PKL
+          {/* Judul Dinamis Sesuai Figma */}
+          <h1 className="hidden sm:block mb-6 sm:mb-8 text-xl sm:text-2xl font-bold text-[#181838]">
+            {getCatalogTitle()}
           </h1>
 
           {isLoading ? (
@@ -62,7 +86,7 @@ const CatalogTemplate = () => {
               <p className="text-base text-[#7A7F8C]">Memuat tempat PKL...</p>
             </div>
           ) : companiesData.length > 0 ? (
-            <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:gap-6 md:grid-cols-2 md:gap-8"> 
 
               {companiesData.map((company) => {
                 const logoUrl = getStrapiMediaUrl(company.logo?.url);
@@ -78,19 +102,15 @@ const CatalogTemplate = () => {
                   'Perusahaan / Instansi';
 
                 return (
-                  <div
+                  <CompanyCard
                     key={company.id}
-                    className="[&>article]:w-full"
-                  >
-                    <CompanyCard
-                      id={company.id}
-                      name={company.nama}
-                      logo={logoUrl}
-                      description={categoryDescription}
-                      major={mainMajor}
-                      slug={company.slug}
-                    />
-                  </div>
+                    id={company.id}
+                    name={company.nama}
+                    logo={logoUrl}
+                    description={categoryDescription}
+                    major={mainMajor}
+                    slug={company.slug}
+                  />
                 );
               })}
 

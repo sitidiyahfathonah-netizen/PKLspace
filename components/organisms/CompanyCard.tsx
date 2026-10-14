@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -31,62 +30,68 @@ export const CompanyCard = ({
 
   return (
     <article
-      className={`flex h-full w-full flex-col justify-between rounded-2xl border-2 border-[#5274C7] bg-white p-4 shadow-sm transition-all duration-300 hover:shadow-md sm:p-5 ${className}`}
+      className={`w-full overflow-hidden rounded-2xl border border-slate-200 bg-white p-3.5 md:p-5 shadow-sm transition-all duration-300 hover:shadow-md flex flex-col justify-between ${className}`}
     >
-      <div>
-        {/* Logo Tempat PKL */}
-        <div className="relative mb-4 flex h-[120px] w-full items-center justify-center overflow-hidden rounded-xl border border-[#9BB0DF] bg-white p-3 sm:h-[150px] sm:p-4">
+      {/* 
+        MOBILE: Kanan-kiri (Flex Row - Foto di Kiri, Teks di Kanan)
+        DESKTOP (md:): Atas-bawah (Flex Col - Foto di Atas, Teks di Bawah)
+      */}
+      <div className="flex flex-row md:flex-col items-center md:items-stretch gap-3.5 md:gap-0">
+        
+        {/* LOGO CONTAINER: Lebar di mobile, penuh di desktop */}
+        <div className="relative flex h-[100px] w-[115px] md:h-[180px] md:w-full shrink-0 md:mb-4 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-2.5 md:p-4">
           <Image
             src={logo}
             alt={`Logo ${name}`}
-            width={200}
-            height={100}
-            className="max-h-full max-w-full object-contain"
+            fill
+            sizes="(max-width: 768px) 115px, 100vw"
+            className="object-contain p-1"
           />
         </div>
 
-        {/* Informasi Tempat PKL */}
-        <div className="mt-3.5 sm:mt-4">
+        {/* INFO CONTAINER */}
+        <div className="flex min-w-0 flex-1 flex-col justify-center">
           <h3
-            className="line-clamp-1 text-base font-bold text-[#1A2E63] sm:text-lg"
+            className="line-clamp-2 text-xs md:text-lg font-bold text-[#181838] leading-snug"
             title={name}
           >
             {name}
           </h3>
 
-          <p className="mt-1 line-clamp-2 text-xs text-[#5F6B84] sm:text-sm">
+          <p className="mt-0.5 md:mt-1 line-clamp-1 text-[11px] md:text-sm text-slate-500">
             {description}
           </p>
 
           {/* Badge Jurusan */}
-          <div className="mt-3 mb-4">
-            <div className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-[#5274C7] bg-[#EAF0FF]/80 px-3 py-1 text-[11px] font-medium text-[#25448C] sm:text-xs">
+          <div className="mt-2 md:mt-3">
+            <div className="inline-flex max-w-full items-center gap-1 rounded-full border border-blue-200 bg-[#EAF0FF] px-2 md:px-3 py-0.5 md:py-1 text-[9px] md:text-xs font-medium text-[#1E254B]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-3.5 w-3.5 shrink-0"
+                className="h-3 w-3 md:h-3.5 md:w-3.5 shrink-0 text-[#25448C]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                aria-hidden="true"
+                strokeWidth={2}
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  strokeWidth="3"
+                  d="M20 7h-4V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2ZM9 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V5Z"
                 />
               </svg>
               <span className="truncate">{major}</span>
             </div>
           </div>
         </div>
+
       </div>
 
-      {/* Tombol Detail */}
-      <div className="mt-4 pt-1 sm:mt-5">
+      {/* TOMBOL DETAIL: Membentang penuh di bawah */}
+      <div className="mt-3.5 md:mt-5 pt-2.5 md:pt-3 border-t border-slate-100">
         <Link
           href={detailHref}
-          className="flex w-full items-center justify-center rounded-xl bg-[#1E254B] py-2.5 text-center text-xs font-semibold text-white transition duration-200 hover:bg-[#141A35] active:scale-[0.98] sm:py-3 sm:text-sm"
+          className="flex w-full items-center justify-center rounded-xl bg-[#181838] py-2 md:py-3 text-center text-xs md:text-sm font-semibold text-white transition duration-200 hover:bg-[#252554] active:scale-[0.98]"
         >
           Detail
         </Link>
