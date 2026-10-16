@@ -1,3 +1,12 @@
+export interface CabangItem {
+  id: number;
+  documentId?: string;
+  nama: string;
+  slug?: string;
+  alamat?: string;
+  tautan_google_maps?: string;
+}
+
 export interface Company {
   id: number;
   documentId: string;
@@ -37,7 +46,7 @@ export interface Company {
     kuota: number;
   }[];
 
-  cabangs: unknown[];
+  cabangs: CabangItem[];
 
   jurusan_diterima: string[];
 }
