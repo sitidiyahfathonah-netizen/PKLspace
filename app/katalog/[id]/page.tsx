@@ -1,15 +1,11 @@
 import DetailTemplate from "@/components/templates/DetailTemplate";
 
-type DetailPageProps = {
-  params: Promise<{
-    id: string;
-  }>;
-};
-
-const DetailPage = async ({ params }: DetailPageProps) => {
+export default async function DetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
 
-  return <DetailTemplate id={id} />;
-};
-
-export default DetailPage;
+  return <DetailTemplate slug={id} />;
+}
