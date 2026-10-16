@@ -1,3 +1,4 @@
+
 import type { Company } from "@/types/company";
 
 const API_BASE_URL =
@@ -20,7 +21,7 @@ export async function getCompanies(params?: {
     if (!response.ok) return [];
 
     const result = await response.json();
-    let rawData = result.data || result;
+    const rawData = result.data || result;
 
     let companies: any[] = rawData.map((item: any) => {
       if (item.attributes) {
@@ -28,6 +29,105 @@ export async function getCompanies(params?: {
       }
       return item;
     });
+
+    // Filter pencarian nama perusahaan
+    if (params?.search?.trim()) {
+      const keyword = params.search.trim().toLowerCase();
+
+      companies = companies.filter((comp) => {
+        const name = String(comp.nama || comp.name || "").toLowerCase();
+        return name.includes(keyword);
+      });
+    }
+
+    // Filter jurusan
+    if (params?.jurusan?.trim() && params.jurusan.trim() !== "Semua") {
+      const selectedMajor = params.jurusan.trim().toLowerCase();
+
+      const getKeywords = (major: string): string[] => {
+        if (major.includes("akuntansi") || major === "akl") {
+          return ["akuntansi", "akl", "keuangan lembaga"];
+        }
+
+        if (
+          major.includes("manajemen perkantoran") ||
+          major === "mplb"
+        ) {
+          return ["manajemen perkantoran", "mplb", "layanan bisnis"];
+        }
+
+        if (major.includes("pemasaran") || major === "pm") {
+          return ["pemasaran", "pm"];
+        }
+
+        if (
+          major.includes("pengembangan perangkat lunak") ||
+          major.includes("gim") ||
+          major === "pplg"
+        ) {
+          return [
+            "pplg",
+            "perangkat lunak",
+            "gim",
+            "rpl",
+            "rekayasa perangkat lunak",
+          ];
+        }
+
+        return [major];
+      };
+
+      const targetKeywords = getKeywords(selectedMajor);
+
+      const getMajorText = (value: any): string[] => {
+        if (!Array.isArray(value)) return [];
+
+        return value.map((item: any) => {
+          if (typeof item === "string") return item.toLowerCase();
+
+          if (item && typeof item === "object") {
+            return String(
+              item.nama || item.jurusan || item.name || ""
+            ).toLowerCase();
+          }
+
+          return "";
+        });
+      };
+
+      companies = companies.filter((comp) => {
+        const mainMajor = String(comp.jurusan_utama || "").toLowerCase();
+        const acceptedMajors = getMajorText(comp.jurusan_diterima);
+        const quotaMajors = getMajorText(comp.kuota_jurusan);
+
+        const allMajors = [
+          mainMajor,
+          ...acceptedMajors,
+          ...quotaMajors,
+        ].join(" ");
+
+        return targetKeywords.some((keyword) =>
+          allMajors.includes(keyword)
+        );
+      });
+
+      // Utamakan perusahaan yang jurusan utamanya sesuai pilihan
+      companies.sort((a, b) => {
+        const mainA = String(a.jurusan_utama || "").toLowerCase();
+        const mainB = String(b.jurusan_utama || "").toLowerCase();
+
+        const isMainA = targetKeywords.some((keyword) =>
+          mainA.includes(keyword)
+        );
+        const isMainB = targetKeywords.some((keyword) =>
+          mainB.includes(keyword)
+        );
+
+        if (isMainA && !isMainB) return -1;
+        if (!isMainA && isMainB) return 1;
+        return 0;
+      });
+    }
 
     return companies;
   } catch (error) {
@@ -42,24 +142,35 @@ export async function getCompanies(params?: {
 export async function getCompanyBySlug(slug: string): Promise<Company | null> {
   try {
     const companies = await getCompanies();
-    
+
     if (companies.length === 0) return null;
 
-    // Cari yang slug atau namanya paling mendekati dengan URL
     let found = companies.find((comp: any) => {
-      const compSlug = comp.slug || (comp.nama ? comp.nama.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") : "");
-      return compSlug === slug || String(comp.id) === slug || (comp.nama && comp.nama.toLowerCase().includes(slug.replace(/-/g, " ")));
+      const compSlug =
+        comp.slug ||
+        (comp.nama
+          ? comp.nama
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/(^-|-$)/g, "")
+          : "");
+
+      return (
+        compSlug === slug ||
+        String(comp.id) === slug ||
+        (comp.nama &&
+          comp.nama.toLowerCase().includes(slug.replace(/-/g, " ")))
+      );
     });
 
     if (!found) {
       found = companies[0];
     }
 
-    // Default set cabangs kosong
     found.cabangs = [];
 
-    // Cek apakah perusahaan ini berjejaring/memiliki cabang (misal: Alfamart)
-    const isAlfamart = found.nama && found.nama.toLowerCase().includes("alfamart");
+    const isAlfamart =
+      found.nama && found.nama.toLowerCase().includes("alfamart");
 
     if (isAlfamart) {
       try {
@@ -78,9 +189,13 @@ export async function getCompanyBySlug(slug: string): Promise<Company | null> {
               slug: item.slug || item.attributes?.slug,
               alamat: item.alamat || item.attributes?.alamat,
               ringkasan: item.ringkasan || item.attributes?.ringkasan,
-              jadwal_kerja: item.jadwal_kerja || item.attributes?.jadwal_kerja,
-              kuota_jurusan: item.kuota_jurusan || item.attributes?.kuota_jurusan, // <--- MAP KUOTA JURUSAN CABANG
-              tautan_google_maps: item.tautan_google_maps || item.attributes?.tautan_google_maps,
+              jadwal_kerja:
+                item.jadwal_kerja || item.attributes?.jadwal_kerja,
+              kuota_jurusan:
+                item.kuota_jurusan || item.attributes?.kuota_jurusan,
+              tautan_google_maps:
+                item.tautan_google_maps ||
+                item.attributes?.tautan_google_maps,
             }));
           }
         }
@@ -103,8 +218,10 @@ export async function getCompanyBySlug(slug: string): Promise<Company | null> {
  */
 export function getStrapiMediaUrl(path: string | null | undefined): string {
   if (!path) return "/img/placeholder-company.png";
+
   if (path.startsWith("http://") || path.startsWith("https://")) {
     return path;
   }
+
   return `${API_BASE_URL}${path}`;
 }
