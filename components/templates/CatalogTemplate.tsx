@@ -103,7 +103,7 @@ const CatalogTemplate = () => {
       <section className="px-4 sm:px-6 pb-12">
         <div className="mx-auto max-w-[1200px]">
           {/* Judul Dinamis Sesuai Figma */}
-          <h1 className="hidden sm:block mb-6 sm:mb-8 text-xl sm:text-2xl font-bold text-[#181838]">
+          <h1 className="block mb-6 sm:mb-8 text-xl sm:text-2xl font-bold text-[#181838]">
             {getCatalogTitle()}
           </h1>
 
