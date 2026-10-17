@@ -19,8 +19,8 @@ const Hero = () => {
           </p>
 
           {/* Button — visible on desktop only */}
-          <div className="mt-3 hidden md:block lg:mt-4">
-            <Button label="Jelajahi" />
+          <div className="mt-3 hidden w-full max-w-[300px] md:block lg:mt-4">
+            <Button label="Jelajahi" href="/katalog" fullWidth className="h-12 text-lg" />
           </div>
         </div>
 
@@ -34,8 +34,8 @@ const Hero = () => {
         </div>
 
         {/* Button — visible on mobile only */}
-        <div className="w-full max-w-[280px] sm:max-w-[320px] md:hidden">
-          <Button label="Jelajahi" fullWidth size="lg" />
+        <div className="w-full max-w-[300px] md:hidden">
+          <Button label="Jelajahi" fullWidth href="/katalog" className="h-12 text-lg" />
         </div>
 
       </div>
