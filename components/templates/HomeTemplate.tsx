@@ -16,18 +16,17 @@ const recommendationGroups = [
   },
   {
     major: "Pemasaran",
-    companies: [
-      ["griya"],
-      ["plaza asia"],
-      ["alfamart"],
-    ],
+    companies: [["griya"], ["plaza asia"], ["alfamart"]],
   },
   {
     major: "Manajemen Perkantoran dan Layanan Bisnis",
     companies: [
       ["badan pertanahan nasional", "bpn sumedang"],
       ["len"],
-      ["bapperida", "badan perencanaan pembangunan riset dan inovasi daerah"],
+      [
+        "bapperida",
+        "badan perencanaan pembangunan riset dan inovasi daerah",
+      ],
     ],
   },
   {
@@ -59,7 +58,13 @@ const matchesName = (companyName: string, aliases: string[]) => {
 };
 
 const HomeTemplate = async () => {
-  const companies = await getCompanies();
+  let companies: Awaited<ReturnType<typeof getCompanies>> = [];
+
+  try {
+    companies = await getCompanies();
+  } catch (error) {
+    console.error("Gagal memuat rekomendasi di halaman beranda:", error);
+  }
 
   const recommendationCompanies = recommendationGroups.flatMap(
     (group) =>
@@ -75,8 +80,7 @@ const HomeTemplate = async () => {
             id: company.id,
             name: company.nama,
             logo: getStrapiMediaUrl(company.logo?.url),
-            description:
-              company.informasi || "Informasi tempat PKL",
+            description: company.informasi || "Informasi tempat PKL",
             major: group.major,
             majors: [group.major],
             slug: company.slug,

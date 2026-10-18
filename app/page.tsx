@@ -1,11 +1,8 @@
-import { Search } from "lucide-react";
+
 import HomeTemplate from "../components/templates/HomeTemplate";
-import SearchBar from "@/components/molecules/SearchBar";
+
+export const dynamic = "force-dynamic";
 
 export default function Home() {
-  return (
-    <>
-    <HomeTemplate />
-      </>
-  );
+  return <HomeTemplate />;
 }
