@@ -14,7 +14,7 @@ PKLspace adalah aplikasi web yang menyediakan informasi tempat Praktik Kerja Lap
 
 Informasi mengenai tempat PKL dapat tersebar di berbagai sumber sehingga siswa membutuhkan waktu untuk mengumpulkan dan membandingkan informasi.
 
-Siswa juga perlu mengetahui apakah suatu tempat menerima jurusannya, persyaratan yang berlaku, kuota yang tersedia, lokasi, dan jadwal kerja.
+Siswa juga perlu mengetahui apakah suatu tempat menerima jurusannya, persyaratan yang berlaku, informasi kuota, lokasi, dan jadwal kerja.
 
 PKLspace dikembangkan untuk mengumpulkan informasi tersebut dalam satu platform yang mudah diakses.
 
@@ -26,7 +26,7 @@ Tujuan PKLspace adalah:
 2. Membantu siswa menemukan tempat PKL berdasarkan nama dan jurusan.
 3. Menyediakan informasi penting untuk membantu siswa mempertimbangkan pilihan tempat PKL.
 4. Menyediakan rekomendasi tempat PKL berdasarkan jurusan.
-5. Menyajikan informasi secara jelas melalui antarmuka yang responsif.
+5. Menyajikan informasi melalui antarmuka yang responsif dan mudah digunakan.
 
 ## 4. Target Users
 
@@ -39,7 +39,7 @@ Kebutuhan utama:
 - Melihat daftar tempat PKL.
 - Mencari tempat PKL berdasarkan nama.
 - Memfilter tempat PKL berdasarkan jurusan.
-- Mengetahui informasi, persyaratan, kegiatan, posisi, kuota, jadwal kerja, dan lokasi tempat PKL.
+- Mengetahui informasi, persyaratan, kegiatan, posisi, kuota, jadwal kerja, dan lokasi tempat PKL jika tersedia.
 - Mendapatkan tips untuk menghadapi PKL.
 
 ### Supporting Stakeholders: Project Team
@@ -54,11 +54,11 @@ Tim pengembang bertanggung jawab membangun frontend, mengintegrasikan backend, s
 - Katalog tempat PKL.
 - Pencarian tempat PKL berdasarkan nama.
 - Filter berdasarkan jurusan.
-- Pengelompokan tempat PKL berdasarkan jurusan utama dan pilihan lainnya.
+- Pengelompokan hasil katalog berdasarkan kecocokan jurusan sesuai implementasi aplikasi.
 - Halaman detail tempat PKL.
-- Informasi jurusan yang diterima dan kuota per jurusan.
-- Informasi lokasi dan tautan Google Maps.
-- Informasi cabang untuk perusahaan yang memiliki data cabang.
+- Informasi jurusan yang diterima dan kuota berdasarkan data yang tersedia.
+- Informasi lokasi dan tautan Google Maps jika tersedia.
+- Informasi cabang untuk perusahaan tertentu yang memiliki data cabang.
 - Halaman Tentang dan tips menghadapi PKL.
 - Integrasi frontend dengan backend API.
 - Tampilan responsif untuk berbagai ukuran layar.
@@ -78,27 +78,27 @@ Fitur berikut tidak termasuk dalam cakupan aplikasi saat ini:
 
 PKLspace mendukung informasi tempat PKL untuk empat jurusan:
 
-| Code |           Major                             |
-|------|---------------------------------------------|
-| PPLG | Pengembangan Perangkat Lunak dan Gim        |
-| AKL  | Akuntansi dan Keuangan Lembaga              |
-| MPLB | Manajemen Perkantoran dan Layanan Bisnis    |
-| PM   | Pemasaran                                   |
+| Code | Major                                    |
+| ---- | ---------------------------------------- |
+| PPLG | Pengembangan Perangkat Lunak dan Gim     |
+| AKL  | Akuntansi dan Keuangan Lembaga           |
+| MPLB | Manajemen Perkantoran dan Layanan Bisnis |
+| PM   | Pemasaran                                |
 
-Kesesuaian tempat PKL ditentukan berdasarkan data jurusan yang tersedia di backend.
+Kesesuaian tempat PKL ditentukan berdasarkan data jurusan yang tersedia dari backend.
 
 ## 7. Functional Requirements
 
 ### FR-01: Homepage
 
-Sistem menampilkan halaman beranda yang berisi pengenalan PKLspace, tips menghadapi PKL, dan rekomendasi tempat PKL.
+Sistem menampilkan halaman beranda yang berisi pengenalan PKLspace, rekomendasi tempat PKL, dan informasi tips menghadapi PKL.
 
 **Acceptance criteria:**
 
-- Pengguna dapat melihat bagian pengenalan dan tips PKL.
-- Pengguna dapat melihat rekomendasi tempat PKL berdasarkan jurusan.
-- Pengguna dapat membuka katalog yang difilter berdasarkan jurusan melalui tautan rekomendasi.
-- Jika tidak ada rekomendasi untuk suatu jurusan, sistem menampilkan pesan yang sesuai.
+- Pengguna dapat melihat pengenalan PKLspace dan informasi tips PKL.
+- Pengguna dapat melihat rekomendasi tempat PKL berdasarkan jurusan sesuai data yang tersedia.
+- Pengguna dapat membuka katalog melalui tautan rekomendasi yang mengarah ke jurusan terkait.
+- Jika data rekomendasi tidak tersedia, bagian tersebut menangani kondisi kosong sesuai implementasi aplikasi.
 
 ### FR-02: Company Catalog
 
@@ -106,11 +106,15 @@ Sistem menampilkan daftar tempat PKL yang datanya diperoleh dari backend.
 
 **Acceptance criteria:**
 
-- Sistem menampilkan kartu tempat PKL berdasarkan data yang berhasil dimuat.
-- Kartu menampilkan nama tempat PKL, logo jika tersedia, dan informasi bidang atau jurusan utama.
-- Pengguna dapat membuka halaman detail dari kartu tempat PKL.
-- Sistem menampilkan indikator pemuatan ketika data sedang diambil.
-- Jika data tidak tersedia, sistem menampilkan pesan bahwa tempat PKL tidak ditemukan.
+- Sistem mengambil data perusahaan melalui backend API.
+- Permintaan katalog menggunakan batas maksimal 100 data per permintaan melalui parameter `pagination[pageSize]=100`.
+- Data yang berhasil diterima digunakan untuk menampilkan kartu tempat PKL.
+- Kartu dapat menampilkan nama tempat PKL, logo jika tersedia, dan informasi bidang atau jurusan yang relevan.
+- Pengguna dapat membuka halaman detail melalui kartu tempat PKL.
+- Sistem menangani proses pemuatan, kegagalan pengambilan data, dan kondisi ketika data tidak tersedia.
+- Katalog saat ini belum menyediakan pagination atau fitur Load More untuk mengambil data berikutnya.
+
+**Batasan:** Data yang dapat dicari dan difilter di frontend dibatasi oleh data yang berhasil diterima dari backend. Jika jumlah tempat PKL melebihi batas pengambilan, data di luar hasil permintaan tersebut belum tentu muncul di katalog.
 
 ### FR-03: Search
 
@@ -119,21 +123,22 @@ Sistem menyediakan pencarian tempat PKL berdasarkan nama.
 **Acceptance criteria:**
 
 - Pengguna dapat memasukkan kata kunci pencarian.
-- Sistem menampilkan hasil yang sesuai dengan kata kunci.
+- Sistem menyaring data yang tersedia berdasarkan nama tempat PKL.
 - Pencarian dapat digunakan bersama filter jurusan.
-- Jika tidak ada hasil yang sesuai, sistem menampilkan pesan yang informatif.
+- Jika tidak ada hasil yang sesuai, sistem menampilkan kondisi kosong atau pesan yang sesuai.
 
 ### FR-04: Major Filter
 
-Sistem menyediakan filter berdasarkan jurusan yaitu PPLG, AKL, MPLB, dan PM.
+Sistem menyediakan filter berdasarkan jurusan PPLG, AKL, MPLB, dan PM.
 
 **Acceptance criteria:**
 
-- Pengguna dapat memilih satu jurusan.
-- Pengguna dapat menerapkan filter dan mengatur ulang filter.
-- Katalog menyesuaikan daftar berdasarkan jurusan yang dipilih.
-- Ketika filter jurusan aktif, tempat PKL dikelompokkan menjadi tempat yang cocok dengan jurusan utama dan pilihan tempat PKL lainnya.
-- Jika filter direset, katalog kembali menampilkan daftar tanpa filter jurusan.
+- Pengguna dapat memilih jurusan melalui kontrol filter.
+- Pengguna dapat menerapkan dan mengatur ulang filter sesuai fitur yang tersedia.
+- Katalog menyesuaikan hasil berdasarkan jurusan yang dipilih.
+- Hasil dapat dikelompokkan berdasarkan kecocokan jurusan utama dan pilihan tempat PKL lain yang relevan sesuai implementasi aplikasi.
+- Jika filter direset, katalog kembali menampilkan hasil tanpa filter jurusan.
+- Hasil filter bergantung pada data yang berhasil diambil dan informasi jurusan yang tersedia.
 
 ### FR-05: Company Detail
 
@@ -142,12 +147,12 @@ Sistem menyediakan halaman detail untuk menampilkan informasi tempat PKL.
 **Acceptance criteria:**
 
 - Halaman detail menampilkan nama tempat PKL dan informasi yang tersedia.
-- Informasi dapat mencakup deskripsi, persyaratan, kegiatan, posisi, jurusan yang diterima, kuota, periode, dan jadwal kerja.
+- Informasi dapat mencakup deskripsi, persyaratan, kegiatan, posisi, jurusan yang diterima, kuota, periode, dan jadwal kerja sesuai kelengkapan data.
 - Alamat dan tautan Google Maps ditampilkan jika tersedia.
-- Logo yang tidak tersedia digantikan dengan gambar placeholder.
-- Informasi cabang ditampilkan apabila data cabang tersedia untuk tempat PKL terkait.
-- Sistem menampilkan indikator pemuatan ketika data sedang diambil.
-- Jika data detail tidak berhasil ditemukan, sistem menyediakan pesan yang sesuai dan tautan kembali ke katalog.
+- Jika logo tidak tersedia, sistem menggunakan tampilan pengganti sesuai implementasi.
+- Informasi cabang ditampilkan apabila tersedia dan didukung oleh implementasi untuk perusahaan terkait.
+- Sistem menangani proses pemuatan data.
+- Jika data detail tidak ditemukan atau gagal dimuat, sistem menampilkan penanganan yang sesuai dan menyediakan navigasi kembali ke katalog jika tersedia.
 
 ### FR-06: About and PKL Tips
 
@@ -156,29 +161,30 @@ Sistem menyediakan halaman Tentang dan informasi tips menghadapi PKL.
 **Acceptance criteria:**
 
 - Pengguna dapat membaca informasi mengenai PKLspace.
-- Pengguna dapat mengakses tips yang membantu persiapan menghadapi PKL.
+- Pengguna dapat mengakses informasi tips untuk membantu persiapan menghadapi PKL.
+- Halaman dapat diakses melalui navigasi aplikasi.
 
 ## 8. Non-Functional Requirements
 
 ### NFR-01: Responsive Design
 
-Antarmuka harus dapat digunakan pada perangkat desktop, dan ponsel.
+Antarmuka dirancang agar dapat digunakan pada perangkat desktop dan ponsel.
 
 ### NFR-02: Usability
 
-Navigasi, pencarian, filter, dan informasi detail harus mudah dipahami oleh siswa.
+Navigasi, pencarian, filter, dan informasi detail dirancang agar mudah dipahami oleh siswa.
 
 ### NFR-03: Maintainability
 
-Kode frontend menggunakan TypeScript dan struktur komponen berbasis Atomic Design untuk membantu pemeliharaan.
+Kode frontend menggunakan TypeScript dan struktur komponen berbasis Atomic Design untuk membantu pemeliharaan kode.
 
 ### NFR-04: Data Integration
 
-Frontend mengambil data tempat PKL dari backend API. Tampilan harus menangani proses pemuatan dan kondisi ketika data tidak tersedia.
+Frontend mengambil data tempat PKL dari backend API dan menangani kondisi pemuatan, kegagalan pengambilan data, serta data yang tidak tersedia.
 
 ### NFR-05: Security
 
-Konfigurasi sensitif tidak boleh disimpan di repositori publik. Variabel dengan awalan `NEXT_PUBLIC_` harus dianggap dapat diakses oleh browser dan tidak boleh berisi rahasia.
+Konfigurasi sensitif tidak boleh disimpan di repositori publik. Variabel dengan awalan `NEXT_PUBLIC_` dapat diakses oleh browser sehingga tidak boleh digunakan untuk menyimpan rahasia.
 
 ## 9. Technical Overview
 
@@ -192,7 +198,7 @@ Konfigurasi sensitif tidak boleh disimpan di repositori publik. Variabel dengan 
 
 ### Component Architecture
 
-Komponen frontend dikelompokkan menggunakan Atomic Design:
+Komponen frontend dikelompokkan menggunakan pendekatan Atomic Design:
 
 - `atoms`: komponen antarmuka dasar.
 - `molecules`: gabungan beberapa komponen dasar.
@@ -203,12 +209,12 @@ Komponen frontend dikelompokkan menggunakan Atomic Design:
 
 Fungsi komunikasi dengan backend dikelola di `lib/api.ts`.
 
-Endpoint yang digunakan:
+Endpoint utama yang digunakan:
 
-| Endpoint                     |                                Purpose                             |
-|------------------------------|--------------------------------------------------------------------|
-| `/api/perusahaans`           | Mengambil data tempat PKL                                          |
-| `/api/cabangs`               | Mengambil data cabang perusahaan tertentu                          |
+| Endpoint           | Purpose                                                    |
+| ------------------ | ---------------------------------------------------------- |
+| `/api/perusahaans` | Mengambil data perusahaan atau tempat PKL.                 |
+| `/api/cabangs`     | Mengambil data cabang untuk kebutuhan perusahaan tertentu. |
 
 Definisi tipe data perusahaan berada di `types/company.ts`.
 
@@ -216,41 +222,44 @@ Alamat dasar API dapat diatur melalui `NEXT_PUBLIC_API_BASE_URL`. Jika variabel 
 
 ## 10. Main Routes
 
-| Route          | Purpose                                           |
-|----------------|---------------------------------------------------|
-| `/`            | Beranda                                           |
-| `/katalog`     | Katalog tempat PKL                                |
-| `/katalog/[id]`| Detail tempat PKL berdasarkan parameter rute      |
-| `/About`       | Halaman Tentang                                   |
-
-Catatan: direktori halaman Tentang saat ini bernama `app/About`. Konvensi penamaan rute dapat ditinjau kembali agar konsisten.
+| Route           | Purpose                                               |
+| --------------- | ----------------------------------------------------- |
+| `/`             | Beranda.                                              |
+| `/about`        | Halaman Tentang.                                      |
+| `/katalog`      | Katalog tempat PKL.                                   |
+| `/katalog/[id]` | Halaman detail tempat PKL berdasarkan parameter rute. |
 
 ## 11. Assumptions and Constraints
 
-- Data tempat PKL bergantung pada ketersediaan backend.
-- Informasi kuota mencerminkan data yang disediakan backend dan tidak menjamin kuota masih tersedia saat siswa memilih tempat PKL.
-- Tidak semua tempat PKL memiliki logo atau data cabang.
-- Informasi yang ditampilkan mengikuti kelengkapan data setiap tempat PKL.
-- Pengelolaan data dilakukan di luar frontend saat ini.
+- Ketersediaan data tempat PKL bergantung pada backend API.
+- Katalog saat ini mengambil maksimal 100 data perusahaan per permintaan.
+- Pencarian dan filter frontend hanya dapat memproses data yang berhasil diterima.
+- Pagination dan fitur Load More belum tersedia pada katalog.
+- Informasi kuota mengikuti data dari backend dan tidak selalu menunjukkan sisa kuota aktual.
+- Tidak semua tempat PKL memiliki logo, informasi cabang, atau data lengkap untuk setiap bagian detail.
+- Informasi yang ditampilkan bergantung pada kelengkapan dan keakuratan data backend.
+- Pengelolaan data tempat PKL dilakukan di luar frontend saat ini.
 
 ## 12. Success Criteria
 
 PKLspace dianggap memenuhi tujuan utamanya apabila:
 
 1. Siswa dapat mengakses daftar tempat PKL.
-2. Siswa dapat mencari dan memfilter tempat PKL berdasarkan jurusan.
-3. Siswa dapat membuka detail dan membaca informasi yang tersedia.
+2. Siswa dapat mencari dan memfilter tempat PKL berdasarkan jurusan menggunakan data yang tersedia.
+3. Siswa dapat membuka halaman detail dan membaca informasi tempat PKL yang tersedia.
 4. Rekomendasi tempat PKL dapat mengarahkan pengguna ke katalog dengan jurusan yang sesuai.
-5. Antarmuka dapat digunakan pada perangkat desktop dan mobile.
+5. Antarmuka dapat digunakan pada perangkat desktop dan ponsel.
 6. Aplikasi dapat mengambil dan menampilkan data backend ketika layanan tersedia.
 
 ## 13. Future Improvements
 
 Pengembangan selanjutnya dapat mempertimbangkan:
 
+- Penambahan pagination atau fitur Load More pada katalog.
+- Pemindahan pencarian dan filter ke backend agar dapat memproses data dalam jumlah lebih besar.
 - Penyempurnaan validasi dan pencocokan jurusan.
 - Peningkatan penanganan kesalahan ketika backend tidak tersedia.
 - Penambahan dan pemeliharaan data tempat PKL yang lebih lengkap.
-- Peninjauan konsistensi rute dan aksesibilitas antarmuka.
+- Peninjauan konsistensi tipe data, rute, dan aksesibilitas antarmuka.
 
-Prioritas pengembangan lanjutan ditentukan berdasarkan evaluasi tim dan kebutuhan pengguna.
+Prioritas pengembangan lanjutan ditentukan berdasarkan evaluasi tim, kebutuhan pengguna, dan waktu pengembangan.

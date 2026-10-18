@@ -1,6 +1,6 @@
 # Development Commands
 
-Dokumen ini berisi referensi perintah yang digunakan untuk instalasi, menjalankan, memeriksa, dan membangun proyek frontend PKLspace.
+Dokumen ini menjelaskan perintah untuk menginstal dependensi, menjalankan, memeriksa, dan membangun aplikasi frontend PKLspace, serta perintah Git yang dapat digunakan selama pengembangan.
 
 ## 1. Prerequisites
 
@@ -14,30 +14,29 @@ Pastikan perangkat sudah memiliki:
 
 ### Install dependencies
 
-Jalankan perintah berikut dari direktori root proyek:
+Jalankan dari direktori root proyek:
 
 ```bash
 npm install
 ```
 
-Perintah ini menginstal dependensi yang tercantum dalam `package.json`.
+Menginstal dependensi yang tercantum dalam `package.json`.
 
 ### Configure environment variables
 
 Frontend mendukung variabel lingkungan berikut:
 
-| Variable                    | Description                                     |
-|-----------------------------|-------------------------------------------------|
-| `NEXT_PUBLIC_API_BASE_URL` | Alamat dasar backend API yang digunakan frontend |
+| Variable | Description |
+| --- | --- |
+| `NEXT_PUBLIC_API_BASE_URL` | Alamat dasar backend API yang digunakan frontend. |
 
-Jika diperlukan, buat file `.env.local` di direktori root proyek:
+Jika ingin menggunakan alamat backend yang berbeda, buat file `.env.local` di direktori root proyek:
 
 ```env
 NEXT_PUBLIC_API_BASE_URL=https://pkl-space-backend-production.up.railway.app
 ```
 
-Variabel tersebut bersifat opsional karena frontend memiliki alamat backend bawaan. Gunakan alamat yang sesuai dengan lingkungan pengembangan.
-
+Variabel ini bersifat opsional karena frontend memiliki alamat backend bawaan. Jika variabel ditentukan, frontend menggunakan alamat tersebut sesuai implementasi di `lib/api.ts`.
 
 ## 3. Development
 
@@ -61,7 +60,7 @@ Tekan `Ctrl + C` di terminal tempat server berjalan.
 npm run lint
 ```
 
-Memeriksa kode menggunakan ESLint berdasarkan konfigurasi proyek.
+Memeriksa kode menggunakan ESLint berdasarkan konfigurasi proyek. Periksa dan perbaiki masalah yang dilaporkan sebelum mengajukan perubahan.
 
 ### Build for production
 
@@ -69,7 +68,7 @@ Memeriksa kode menggunakan ESLint berdasarkan konfigurasi proyek.
 npm run build
 ```
 
-Membuat build aplikasi untuk produksi. Perbaiki error yang ditemukan sebelum melakukan deployment.
+Membuat build aplikasi untuk produksi. Pastikan proses build berhasil sebelum melakukan deployment.
 
 ### Start production server
 
@@ -91,15 +90,17 @@ Perintah ini dijalankan langsung melalui TypeScript compiler dan bukan script kh
 
 ## 6. Git Workflow
 
+Perintah berikut merupakan referensi untuk mengelola perubahan. Sesuaikan dengan branch dan file yang sedang dikerjakan.
+
 ### Check working tree
 
 ```bash
 git status
 ```
 
-Menampilkan branch aktif dan perubahan file.
+Menampilkan branch aktif serta status perubahan file.
 
-### List branches
+### List local branches
 
 ```bash
 git branch
@@ -113,7 +114,7 @@ Menampilkan branch lokal yang tersedia. Tanda `*` menunjukkan branch aktif.
 git switch -c docs/your-task-name
 ```
 
-Gunakan nama branch yang sesuai dengan pekerjaan. Contoh di atas hanya untuk referensi; jangan jalankan jika branch terkait sudah ada.
+Membuat branch baru sekaligus berpindah ke branch tersebut. Ganti nama contoh dengan nama branch yang sesuai dan pastikan branch tersebut belum ada.
 
 ### Stage changes
 
@@ -121,12 +122,12 @@ Gunakan nama branch yang sesuai dengan pekerjaan. Contoh di atas hanya untuk ref
 git add README.md docs/commands.md docs/PRD.md
 ```
 
-Menambahkan file dokumentasi yang dipilih ke staging area. Sesuaikan daftar file dengan perubahan yang memang ingin di-commit.
+Menambahkan file dokumentasi yang dipilih ke staging area. Sesuaikan daftar file dengan perubahan yang ingin disertakan dalam commit.
 
 ### Commit changes
 
 ```bash
-git commit -m "docs: add project documentation"
+git commit -m "docs: update project documentation"
 ```
 
 Menyimpan perubahan yang sudah di-stage ke riwayat Git.
@@ -141,20 +142,21 @@ Mengirim branch ke repositori remote. Ganti `docs/your-task-name` dengan nama br
 
 ## 7. Available npm Scripts
 
-Script yang didefinisikan dalam `package.json`:
+Script yang tersedia dalam `package.json`:
 
-| Script        | Command         | Purpose           |
-|---------------|-----------------|-------------------|
-| `dev`         | `npm run dev`   | Development server|
-| `lint`        | `npm run lint`  | ESLint checks     |
-| `build`       | `npm run build` | Production build  |
-| `start`       | `npm run start` | Production server |
+| Script  | Command         | Purpose                            |
+| ------- | --------------- | ---------------------------------- |
+| `dev`   | `npm run dev`   | Menjalankan server pengembangan.   |
+| `lint`  | `npm run lint`  | Memeriksa kode menggunakan ESLint. |
+| `build` | `npm run build` | Membuat build produksi.            |
+| `start` | `npm run start` | Menjalankan server produksi.       |
 
 ## 8. Notes
 
 - Jalankan perintah dari direktori root proyek frontend.
 - Pastikan dependensi sudah terinstal sebelum menjalankan aplikasi.
-- Pastikan backend dapat diakses agar data tempat PKL bisa dimuat.
-- Jangan commit file `.env.local` jika berisi konfigurasi lokal atau informasi sensitif.
-- Periksa hasil build dan lint sebelum mengajukan Pull Request.
-- Proyek menggunakan Pull Request untuk meninjau perubahan sebelum digabungkan ke branch utama.
+- Pastikan backend dapat diakses agar data tempat PKL dapat dimuat.
+- Jangan commit file `.env.local` yang berisi konfigurasi lokal.
+- Periksa hasil lint dan build sebelum mengajukan Pull Request.
+- Pull Request digunakan untuk meninjau perubahan sebelum digabungkan ke branch utama.
+- Perintah dalam dokumen ini dijalankan sesuai kebutuhan dan tidak berjalan otomatis, kecuali dikonfigurasi secara terpisah.
