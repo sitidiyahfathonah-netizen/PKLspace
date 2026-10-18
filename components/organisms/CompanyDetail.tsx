@@ -21,7 +21,7 @@ type CompanyDetailProps = {
 // Helper untuk merender teks markdown sederhana (**teks**) menjadi HTML tebal
 const renderMarkdownText = (text: string) => {
   if (!text) return null;
-  
+
   const parts = text.split(/(\*\*.*?\*\*)/g);
 
   return parts.map((part, index) => {
@@ -141,7 +141,14 @@ const CompanyDetail = ({
                           strokeWidth="2"
                           className="h-5 w-5"
                         >
-                          <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                          <rect
+                            x="2"
+                            y="7"
+                            width="20"
+                            height="14"
+                            rx="2"
+                            ry="2"
+                          />
                           <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
                         </svg>
                       </div>
@@ -218,43 +225,54 @@ const CompanyDetail = ({
           </div>
         )}
 
-        {activeTab === "Jadwal kerja" && (() => {
-          // Memecah teks workHours berdasarkan heading yang ada di Strapi
-          const partsKeterangan = workHours.split(/Keterangan:\s*/i);
-          const mainPart = partsKeterangan[0];
-          const keteranganText = partsKeterangan[1] ? partsKeterangan[1].trim() : "";
+        {activeTab === "Jadwal kerja" &&
+          (() => {
+            // Memecah teks workHours berdasarkan heading yang ada di Strapi
+            const partsKeterangan = workHours.split(/Keterangan:\s*/i);
+            const mainPart = partsKeterangan[0];
+            const keteranganText = partsKeterangan[1]
+              ? partsKeterangan[1].trim()
+              : "";
 
-          const partsShift = mainPart.split(/Jadwal Shift[^:]*:\s*/i);
-          const jadwalKerjaText = partsShift[0].replace(/Jadwal Tempat & Sistem Jam Kerja:\s*/i, "").trim();
-          const jadwalShiftText = partsShift[1] ? partsShift[1].trim() : "";
+            const partsShift = mainPart.split(/Jadwal Shift[^:]*:\s*/i);
+            const jadwalKerjaText = partsShift[0]
+              .replace(/Jadwal Tempat & Sistem Jam Kerja:\s*/i, "")
+              .trim();
+            const jadwalShiftText = partsShift[1] ? partsShift[1].trim() : "";
 
-          return (
-            <div>
-              <h2 className="text-base font-bold text-[#211B55]">Jadwal & Sistem Kerja</h2>
-              <p className="mt-3 text-xs md:text-sm leading-relaxed text-[#5F6470]">
-                {renderMarkdownText(jadwalKerjaText)}
-              </p>
+            return (
+              <div>
+                <h2 className="text-base font-bold text-[#211B55]">
+                  Jadwal & Sistem Kerja
+                </h2>
+                <p className="mt-3 text-xs md:text-sm leading-relaxed text-[#5F6470]">
+                  {renderMarkdownText(jadwalKerjaText)}
+                </p>
 
-              {jadwalShiftText && (
-                <>
-                  <h2 className="mt-6 text-base font-bold text-[#211B55]">Jadwal Shift (bisa berubah tergantung pembimbing)</h2>
-                  <p className="mt-3 text-xs md:text-sm leading-relaxed text-[#5F6470]">
-                    {renderMarkdownText(jadwalShiftText)}
-                  </p>
-                </>
-              )}
+                {jadwalShiftText && (
+                  <>
+                    <h2 className="mt-6 text-base font-bold text-[#211B55]">
+                      Jadwal Shift (bisa berubah tergantung pembimbing)
+                    </h2>
+                    <p className="mt-3 text-xs md:text-sm leading-relaxed text-[#5F6470]">
+                      {renderMarkdownText(jadwalShiftText)}
+                    </p>
+                  </>
+                )}
 
-              {keteranganText && (
-                <>
-                  <h2 className="mt-6 text-base font-bold text-[#211B55]">Keterangan</h2>
-                  <p className="mt-3 text-xs md:text-sm leading-relaxed text-[#5F6470]">
-                    {renderMarkdownText(keteranganText)}
-                  </p>
-                </>
-              )}
-            </div>
-          );
-        })()}
+                {keteranganText && (
+                  <>
+                    <h2 className="mt-6 text-base font-bold text-[#211B55]">
+                      Keterangan
+                    </h2>
+                    <p className="mt-3 text-xs md:text-sm leading-relaxed text-[#5F6470]">
+                      {renderMarkdownText(keteranganText)}
+                    </p>
+                  </>
+                )}
+              </div>
+            );
+          })()}
       </div>
     </section>
   );

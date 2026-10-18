@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
@@ -54,10 +53,7 @@ const getMajorKeywords = (major: string): string[] => {
     ];
   }
 
-  if (
-    value.includes("manajemen perkantoran") ||
-    value === "mplb"
-  ) {
+  if (value.includes("manajemen perkantoran") || value === "mplb") {
     return [
       "mplb",
       "manajemen perkantoran dan layanan bisnis",
@@ -109,7 +105,9 @@ const Recommendation = ({ companies }: RecommendationProps) => {
   const navigationDirection = useRef<"next" | "previous" | "dot" | null>(null);
 
   const resistanceAccumulator = useRef(0);
-  const resistanceResetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resistanceResetTimer = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   const touchStartX = useRef(0);
   const isTouching = useRef(false);
@@ -118,14 +116,11 @@ const Recommendation = ({ companies }: RecommendationProps) => {
   const keywords = getMajorKeywords(selectedMajor);
 
   const recommendedCompanies = companies.filter((company) => {
-    const allCompanyMajors = [
-      company.major,
-      ...(company.majors ?? []),
-    ].filter(Boolean);
-
-    return allCompanyMajors.some((major) =>
-      matchesMajor(major, keywords)
+    const allCompanyMajors = [company.major, ...(company.majors ?? [])].filter(
+      Boolean,
     );
+
+    return allCompanyMajors.some((major) => matchesMajor(major, keywords));
   });
 
   const handleScrollMetrics = useCallback(() => {
@@ -135,9 +130,7 @@ const Recommendation = ({ companies }: RecommendationProps) => {
     const { scrollLeft, scrollWidth, clientWidth } = container;
     const maxScroll = scrollWidth - clientWidth;
     const ratio =
-      maxScroll > 0
-        ? Math.min(Math.max(scrollLeft / maxScroll, 0), 1)
-        : 0;
+      maxScroll > 0 ? Math.min(Math.max(scrollLeft / maxScroll, 0), 1) : 0;
 
     setScrollRatio(ratio);
 
@@ -195,7 +188,7 @@ const Recommendation = ({ companies }: RecommendationProps) => {
         setActiveMajor((prev) => prev - 1);
       }
     },
-    [activeMajor]
+    [activeMajor],
   );
 
   const handleScroll = () => {
@@ -279,8 +272,7 @@ const Recommendation = ({ companies }: RecommendationProps) => {
     const deltaX = touchStartX.current - currentX;
 
     const isAtEnd =
-      container.scrollLeft + container.clientWidth >=
-      container.scrollWidth - 8;
+      container.scrollLeft + container.clientWidth >= container.scrollWidth - 8;
     const isAtStart = container.scrollLeft <= 8;
 
     const TOUCH_RESISTANCE = 95;

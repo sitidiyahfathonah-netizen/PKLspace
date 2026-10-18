@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
 
 interface CompanyCardProps {
   id?: number;
@@ -20,13 +20,13 @@ export const CompanyCard = ({
   description,
   major,
   slug,
-  className = '',
+  className = "",
 }: CompanyCardProps) => {
   const detailHref = slug
     ? `/katalog/${slug}`
     : id !== undefined
       ? `/katalog/${id}`
-      : '/katalog';
+      : "/katalog";
 
   return (
     <article
@@ -37,7 +37,6 @@ export const CompanyCard = ({
         DESKTOP (md:): Atas-bawah (Flex Col - Foto di Atas, Teks di Bawah)
       */}
       <div className="flex flex-col items-stretch gap-3.5">
-        
         {/* LOGO CONTAINER: Lebar di mobile, penuh di desktop */}
         <div className="relative flex h-[175px] w-full shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-3 md:mb-4 md:h-[180px] md:p-4">
           <Image
@@ -84,7 +83,6 @@ export const CompanyCard = ({
             </div>
           </div>
         </div>
-
       </div>
 
       {/* TOMBOL DETAIL: Membentang penuh di bawah */}

@@ -88,23 +88,22 @@ const SearchFilter = ({
                 return (
                   <label
                     key={major.value}
-                    className="flex cursor-pointer items-center gap-5">
+                    className="flex cursor-pointer items-center gap-5"
+                  >
                     <input
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => {
-                        setFilterMajor(
-                          isSelected ? "" : major.value
-                        );
+                        setFilterMajor(isSelected ? "" : major.value);
                       }}
-                      className="sr-only"/>
+                      className="sr-only"
+                    />
 
                     <span
                       className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-[#39339A] ${
-                        isSelected
-                          ? "bg-[#39339A]"
-                          : "bg-white"
-                      }`}>
+                        isSelected ? "bg-[#39339A]" : "bg-white"
+                      }`}
+                    >
                       {isSelected && (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +111,8 @@ const SearchFilter = ({
                           fill="none"
                           stroke="white"
                           strokeWidth="3"
-                          className="h-7 w-7">
+                          className="h-7 w-7"
+                        >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -139,7 +139,8 @@ const SearchFilter = ({
             <button
               type="button"
               onClick={handleApplyFilter}
-              className="mt-6 w-full rounded-xl border-2 border-[#39339A] bg-white px-6 py-3 text-2xl font-semibold text-[#39339A] transition hover:bg-[#F0F0FF]">
+              className="mt-6 w-full rounded-xl border-2 border-[#39339A] bg-white px-6 py-3 text-2xl font-semibold text-[#39339A] transition hover:bg-[#F0F0FF]"
+            >
               Terapkan
             </button>
 
@@ -147,7 +148,8 @@ const SearchFilter = ({
             <button
               type="button"
               onClick={handleResetFilter}
-              className="mt-5 w-full rounded-xl border-2 border-[#39339A] bg-white px-6 py-3 text-2xl font-semibold text-[#39339A] transition hover:bg-[#F0F0FF]">
+              className="mt-5 w-full rounded-xl border-2 border-[#39339A] bg-white px-6 py-3 text-2xl font-semibold text-[#39339A] transition hover:bg-[#F0F0FF]"
+            >
               Reset Filter
             </button>
           </div>

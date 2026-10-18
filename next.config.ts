@@ -3,8 +3,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'pkl-space-backend-production.up.railway.app',
+        protocol: "https",
+        hostname: "pkl-space-backend-production.up.railway.app",
       },
     ],
   },

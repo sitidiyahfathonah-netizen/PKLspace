@@ -1,48 +1,80 @@
+"use client";
 
-'use client';
-
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const tips = [
   {
-    number: '1',
-    title: 'Checklist CV Magang ATS-Friendly',
-    icon: 'pencil',
+    number: "1",
+    title: "Checklist CV Magang ATS-Friendly",
+    icon: "pencil",
     items: [
-      { label: 'Format Rapi', text: 'Gunakan font standar (Inter/Arial) & simpan format PDF.' },
-      { label: 'Highlight Skill', text: 'Tampilkan tools/software yang paling dikuasai.' },
-      { label: 'Sertakan Proyek', text: 'Masukkan tugas sekolah/proyek yang relevan.' },
+      {
+        label: "Format Rapi",
+        text: "Gunakan font standar (Inter/Arial) & simpan format PDF.",
+      },
+      {
+        label: "Highlight Skill",
+        text: "Tampilkan tools/software yang paling dikuasai.",
+      },
+      {
+        label: "Sertakan Proyek",
+        text: "Masukkan tugas sekolah/proyek yang relevan.",
+      },
     ],
   },
   {
-    number: '2',
-    title: 'Trik Sukses Interview PKL',
-    icon: 'microphone',
+    number: "2",
+    title: "Trik Sukses Interview PKL",
+    icon: "microphone",
     items: [
-      { label: 'Riset Tempat', text: 'Pelajari profil & bidang usaha perusahaan tujuan.' },
-      { label: 'Jawab Jujur', text: 'Pakai rumus Pendidikan + Keahlian + Alasan Melamar.' },
-      { label: 'Persiapan Teknis', text: 'Cek koneksi & mik jika interview via online.' },
+      {
+        label: "Riset Tempat",
+        text: "Pelajari profil & bidang usaha perusahaan tujuan.",
+      },
+      {
+        label: "Jawab Jujur",
+        text: "Pakai rumus Pendidikan + Keahlian + Alasan Melamar.",
+      },
+      {
+        label: "Persiapan Teknis",
+        text: "Cek koneksi & mik jika interview via online.",
+      },
     ],
   },
   {
-    number: '3',
-    title: 'Tips Laporan Selesai Tepat Waktu',
-    icon: 'document',
+    number: "3",
+    title: "Tips Laporan Selesai Tepat Waktu",
+    icon: "document",
     items: [
-      { label: 'Cicil Logbook', text: 'Catat tugas harian setiap sore di catatan HP.' },
-      { label: 'Dokumentasi Proyek', text: 'Simpan foto & bukti hasil kerja secara berkala.' },
-      { label: 'Konsultasi Rutin', text: 'Minta feedback pembimbing sebelum deadline.' },
+      {
+        label: "Cicil Logbook",
+        text: "Catat tugas harian setiap sore di catatan HP.",
+      },
+      {
+        label: "Dokumentasi Proyek",
+        text: "Simpan foto & bukti hasil kerja secara berkala.",
+      },
+      {
+        label: "Konsultasi Rutin",
+        text: "Minta feedback pembimbing sebelum deadline.",
+      },
     ],
   },
 ];
 
 function TipIcon({ type, className }: { type: string; className?: string }) {
-  const defaultClasses = 'h-10 w-10 sm:h-11 sm:w-11 lg:h-12 lg:w-12 xl:h-14 xl:w-14 shrink-0';
+  const defaultClasses =
+    "h-10 w-10 sm:h-11 sm:w-11 lg:h-12 lg:w-12 xl:h-14 xl:w-14 shrink-0";
   const iconClasses = className ?? defaultClasses;
 
-  if (type === 'pencil') {
+  if (type === "pencil") {
     return (
-      <svg viewBox="0 0 80 80" fill="none" aria-hidden="true" className={iconClasses}>
+      <svg
+        viewBox="0 0 80 80"
+        fill="none"
+        aria-hidden="true"
+        className={iconClasses}
+      >
         <path
           d="M15 55 54 16a7 7 0 0 1 10 0l5 5a7 7 0 0 1 0 10L30 70 12 73l3-18Z"
           stroke="currentColor"
@@ -50,14 +82,24 @@ function TipIcon({ type, className }: { type: string; className?: string }) {
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <path d="m48 22 16 16" stroke="currentColor" strokeWidth="6.5" strokeLinecap="round" />
+        <path
+          d="m48 22 16 16"
+          stroke="currentColor"
+          strokeWidth="6.5"
+          strokeLinecap="round"
+        />
       </svg>
     );
   }
 
-  if (type === 'microphone') {
+  if (type === "microphone") {
     return (
-      <svg viewBox="0 0 80 80" fill="none" aria-hidden="true" className={iconClasses}>
+      <svg
+        viewBox="0 0 80 80"
+        fill="none"
+        aria-hidden="true"
+        className={iconClasses}
+      >
         <rect
           x="30"
           y="9"
@@ -79,14 +121,25 @@ function TipIcon({ type, className }: { type: string; className?: string }) {
   }
 
   return (
-    <svg viewBox="0 0 80 80" fill="none" aria-hidden="true" className={iconClasses}>
+    <svg
+      viewBox="0 0 80 80"
+      fill="none"
+      aria-hidden="true"
+      className={iconClasses}
+    >
       <path
         d="M18 9h29l20 18v42a5 5 0 0 1-5 5H18a5 5 0 0 1-5-5V14a5 5 0 0 1 5-5Z"
         stroke="currentColor"
         strokeWidth="6.5"
         strokeLinejoin="round"
       />
-      <path d="M47 10v19h19" stroke="currentColor" strokeWidth="6.5" strokeLinejoin="round" strokeLinecap="round" />
+      <path
+        d="M47 10v19h19"
+        stroke="currentColor"
+        strokeWidth="6.5"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -111,8 +164,7 @@ function TipCardDesktop({ tip }: { tip: (typeof tips)[number] }) {
       <ul className="list-disc space-y-0.5 pl-3.5 text-[11px] leading-tight text-[#211B55] sm:space-y-1 sm:pl-4 sm:text-[11.5px] lg:text-[12px] xl:text-[12.5px] lg:leading-snug">
         {tip.items.map((item) => (
           <li key={item.label}>
-            <span className="font-bold">{item.label} :</span>{' '}
-            {item.text}
+            <span className="font-bold">{item.label} :</span> {item.text}
           </li>
         ))}
       </ul>
@@ -125,7 +177,10 @@ function TipCardMobile({ tip }: { tip: (typeof tips)[number] }) {
     <article className="flex h-full w-full items-center rounded-xl border-[1.8px] border-[#211B55] bg-[#DCE9FC] px-3.5 py-2.5 text-[#211B55] sm:px-4 sm:py-3">
       {/* Ikon di pinggir */}
       <div className="flex w-12 shrink-0 items-center justify-center text-[#211B55] sm:w-14">
-        <TipIcon type={tip.icon} className="h-11 w-11 shrink-0 sm:h-12 sm:w-12" />
+        <TipIcon
+          type={tip.icon}
+          className="h-11 w-11 shrink-0 sm:h-12 sm:w-12"
+        />
       </div>
 
       {/* Garis pemisah vertikal */}
@@ -139,8 +194,7 @@ function TipCardMobile({ tip }: { tip: (typeof tips)[number] }) {
         <ul className="list-disc space-y-0.5 pl-3.5 text-[11px] leading-[1.35] text-[#211B55] sm:space-y-1 sm:pl-4 sm:text-[12px]">
           {tip.items.map((item) => (
             <li key={item.label}>
-              <span className="font-bold">{item.label} :</span>{' '}
-              {item.text}
+              <span className="font-bold">{item.label} :</span> {item.text}
             </li>
           ))}
         </ul>
@@ -172,7 +226,7 @@ const TipsBanner = () => {
   useEffect(() => {
     setMounted(true);
 
-    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
 
     const updateScreen = () => {
       setIsMobile(mediaQuery.matches);
@@ -180,31 +234,36 @@ const TipsBanner = () => {
     };
 
     updateScreen();
-    mediaQuery.addEventListener('change', updateScreen);
+    mediaQuery.addEventListener("change", updateScreen);
 
-    return () => mediaQuery.removeEventListener('change', updateScreen);
+    return () => mediaQuery.removeEventListener("change", updateScreen);
   }, []);
 
   // Slide nyata (Desktop: 2 slide [gambar, 3 kartu]. Mobile: 4 slide [gambar, tip 1, tip 2, tip 3])
-  const realSlides = mounted && isMobile
-    ? [
-        <ImageSlide key="image" />,
-        ...tips.map((tip) => (
-          <div key={tip.number} className="flex h-full w-full items-center justify-center px-2 sm:px-2.5">
-            <TipCardMobile tip={tip} />
-          </div>
-        )),
-      ]
-    : [
-        <ImageSlide key="image" />,
-        <div
-          key="cards"
-          className="grid h-full w-full grid-cols-3 items-stretch gap-3 px-2 sm:gap-4 sm:px-3 lg:gap-5 lg:px-4">
-          {tips.map((tip) => (
-            <TipCardDesktop key={tip.number} tip={tip} />
-          ))}
-        </div>,
-      ];
+  const realSlides =
+    mounted && isMobile
+      ? [
+          <ImageSlide key="image" />,
+          ...tips.map((tip) => (
+            <div
+              key={tip.number}
+              className="flex h-full w-full items-center justify-center px-2 sm:px-2.5"
+            >
+              <TipCardMobile tip={tip} />
+            </div>
+          )),
+        ]
+      : [
+          <ImageSlide key="image" />,
+          <div
+            key="cards"
+            className="grid h-full w-full grid-cols-3 items-stretch gap-3 px-2 sm:gap-4 sm:px-3 lg:gap-5 lg:px-4"
+          >
+            {tips.map((tip) => (
+              <TipCardDesktop key={tip.number} tip={tip} />
+            ))}
+          </div>,
+        ];
 
   const totalReal = realSlides.length;
   // Clone slide pertama di akhir untuk infinite carousel loop yang mulus
@@ -267,14 +326,16 @@ const TipsBanner = () => {
             style={{
               width: `${trackCount * 100}%`,
               transform: `translateX(-${(currentIndex * 100) / trackCount}%)`,
-              transition: isJumping ? 'none' : 'transform 700ms ease-in-out',
+              transition: isJumping ? "none" : "transform 700ms ease-in-out",
             }}
-            onTransitionEnd={handleTransitionEnd}>
+            onTransitionEnd={handleTransitionEnd}
+          >
             {trackSlides.map((slide, index) => (
               <div
                 key={index}
                 className="flex h-full items-stretch"
-                style={{ width: `${100 / trackCount}%` }}>
+                style={{ width: `${100 / trackCount}%` }}
+              >
                 {slide}
               </div>
             ))}
@@ -289,11 +350,11 @@ const TipsBanner = () => {
               type="button"
               onClick={() => setCurrentIndex(index)}
               aria-label={`Slide ${index + 1}`}
-              aria-current={index === dotIndex ? 'true' : undefined}
+              aria-current={index === dotIndex ? "true" : undefined}
               className={`h-1.5 rounded-full transition-all duration-300 ${
                 index === dotIndex
-                  ? 'w-4 bg-[#211B55]'
-                  : 'w-1.5 bg-[#211B55]/30'
+                  ? "w-4 bg-[#211B55]"
+                  : "w-1.5 bg-[#211B55]/30"
               }`}
             />
           ))}

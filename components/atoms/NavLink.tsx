@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 
 interface NavLinkProps {
   href: string;
@@ -13,7 +13,7 @@ export const NavLink = ({ href, label, isActive = false }: NavLinkProps) => {
     <Link
       href={href}
       className={`relative py-1 text-sm font-semibold transition-colors hover:text-white ${
-        isActive ? 'text-blue-300' : 'text-gray-300'
+        isActive ? "text-blue-300" : "text-gray-300"
       }`}
     >
       {label}

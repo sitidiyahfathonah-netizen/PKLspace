@@ -71,10 +71,7 @@ const CatalogTemplate = () => {
       return "Daftar Tempat PKL Jurusan AKL";
     }
 
-    if (
-      lower.includes("manajemen perkantoran") ||
-      lower === "mplb"
-    ) {
+    if (lower.includes("manajemen perkantoran") || lower === "mplb") {
       return "Daftar Tempat PKL Jurusan MPLB";
     }
 
@@ -99,10 +96,8 @@ const CatalogTemplate = () => {
         const search = selectedMajor.toLowerCase();
 
         const isMatchPPLG =
-          (search.includes("pplg") ||
-            search.includes("perangkat lunak")) &&
-          (main.includes("pplg") ||
-            main.includes("perangkat lunak"));
+          (search.includes("pplg") || search.includes("perangkat lunak")) &&
+          (main.includes("pplg") || main.includes("perangkat lunak"));
 
         const isMatchAKL =
           (search.includes("akl") || search.includes("akuntansi")) &&
@@ -111,8 +106,7 @@ const CatalogTemplate = () => {
         const isMatchMPLB =
           (search.includes("mplb") ||
             search.includes("manajemen perkantoran")) &&
-          (main.includes("mplb") ||
-            main.includes("manajemen perkantoran"));
+          (main.includes("mplb") || main.includes("manajemen perkantoran"));
 
         const isMatchPM =
           (search === "pm" || search.includes("pemasaran")) &&
@@ -129,9 +123,7 @@ const CatalogTemplate = () => {
       })
     : companiesData;
 
-  const primaryIds = new Set(
-    primaryCompanies.map((company) => company.id)
-  );
+  const primaryIds = new Set(primaryCompanies.map((company) => company.id));
 
   const otherCompanies = selectedMajor
     ? companiesData.filter((company) => !primaryIds.has(company.id))
@@ -153,15 +145,11 @@ const CatalogTemplate = () => {
 
           {isLoading ? (
             <div className="flex min-h-[300px] items-center justify-center">
-              <p className="text-base text-[#7A7F8C]">
-                Memuat tempat PKL...
-              </p>
+              <p className="text-base text-[#7A7F8C]">Memuat tempat PKL...</p>
             </div>
           ) : error ? (
             <div className="flex min-h-[300px] flex-col items-center justify-center gap-4">
-              <p className="text-center text-base text-[#7A7F8C]">
-                {error}
-              </p>
+              <p className="text-center text-base text-[#7A7F8C]">{error}</p>
 
               <button
                 type="button"
@@ -176,9 +164,7 @@ const CatalogTemplate = () => {
               {primaryCompanies.length > 0 && (
                 <div className="grid grid-cols-1 gap-3 sm:gap-6 md:grid-cols-2 md:gap-8">
                   {primaryCompanies.map((company) => {
-                    const logoUrl = getStrapiMediaUrl(
-                      company.logo?.url
-                    );
+                    const logoUrl = getStrapiMediaUrl(company.logo?.url);
 
                     const mainMajor =
                       company.jurusan_utama ||
@@ -209,18 +195,16 @@ const CatalogTemplate = () => {
                 <div className="space-y-6 pt-4">
                   <div className="border-t border-[#E2E8F0] pt-6 text-center">
                     <p className="mx-auto max-w-xl text-sm font-medium leading-relaxed text-slate-600 sm:text-base">
-                      Berikut beberapa tempat PKL lainnya yang dapat
-                      menjadi pilihan
-                      <br className="hidden sm:block" /> bagi siswa
-                      jurusan {selectedMajor}
+                      Berikut beberapa tempat PKL lainnya yang dapat menjadi
+                      pilihan
+                      <br className="hidden sm:block" /> bagi siswa jurusan{" "}
+                      {selectedMajor}
                     </p>
                   </div>
 
                   <div className="grid grid-cols-1 gap-3 sm:gap-6 md:grid-cols-2 md:gap-8">
                     {otherCompanies.map((company) => {
-                      const logoUrl = getStrapiMediaUrl(
-                        company.logo?.url
-                      );
+                      const logoUrl = getStrapiMediaUrl(company.logo?.url);
 
                       const mainMajor =
                         company.jurusan_utama ||
@@ -248,14 +232,13 @@ const CatalogTemplate = () => {
                 </div>
               )}
 
-              {primaryCompanies.length === 0 &&
-                otherCompanies.length === 0 && (
-                  <div className="flex min-h-[300px] items-center justify-center">
-                    <p className="text-center text-base text-[#7A7F8C]">
-                      Tempat PKL tidak ditemukan.
-                    </p>
-                  </div>
-                )}
+              {primaryCompanies.length === 0 && otherCompanies.length === 0 && (
+                <div className="flex min-h-[300px] items-center justify-center">
+                  <p className="text-center text-base text-[#7A7F8C]">
+                    Tempat PKL tidak ditemukan.
+                  </p>
+                </div>
+              )}
             </div>
           ) : (
             <div className="flex min-h-[300px] items-center justify-center">

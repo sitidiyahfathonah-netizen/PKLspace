@@ -1,4 +1,3 @@
-
 import Hero from "../organisms/Hero";
 import TipsBanner from "../organisms/TipsBanner";
 import Recommendation from "../organisms/Recommendation";
@@ -23,10 +22,7 @@ const recommendationGroups = [
     companies: [
       ["badan pertanahan nasional", "bpn sumedang"],
       ["len"],
-      [
-        "bapperida",
-        "badan perencanaan pembangunan riset dan inovasi daerah",
-      ],
+      ["bapperida", "badan perencanaan pembangunan riset dan inovasi daerah"],
     ],
   },
   {
@@ -40,7 +36,10 @@ const recommendationGroups = [
 ];
 
 const normalize = (value: string) =>
-  value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
 
 const matchesName = (companyName: string, aliases: string[]) => {
   const name = normalize(companyName);
@@ -66,30 +65,27 @@ const HomeTemplate = async () => {
     console.error("Gagal memuat rekomendasi di halaman beranda:", error);
   }
 
-  const recommendationCompanies = recommendationGroups.flatMap(
-    (group) =>
-      group.companies.flatMap((aliases) => {
-        const company = companies.find((item) =>
-          matchesName(item.nama, aliases)
-        );
+  const recommendationCompanies = recommendationGroups.flatMap((group) =>
+    group.companies.flatMap((aliases) => {
+      const company = companies.find((item) => matchesName(item.nama, aliases));
 
-        if (!company) return [];
+      if (!company) return [];
 
-        return [
-          {
-            id: company.id,
-            name: company.nama,
-            logo: getStrapiMediaUrl(company.logo?.url),
-            description:
-              company.bidang?.nama ||
-              company.kategori?.nama ||
-              "Perusahaan / Instansi",
-            major: group.major,
-            majors: [group.major],
-            slug: company.slug,
-          },
-        ];
-      })
+      return [
+        {
+          id: company.id,
+          name: company.nama,
+          logo: getStrapiMediaUrl(company.logo?.url),
+          description:
+            company.bidang?.nama ||
+            company.kategori?.nama ||
+            "Perusahaan / Instansi",
+          major: group.major,
+          majors: [group.major],
+          slug: company.slug,
+        },
+      ];
+    }),
   );
 
   return (

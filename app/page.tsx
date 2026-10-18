@@ -1,4 +1,3 @@
-
 import HomeTemplate from "../components/templates/HomeTemplate";
 
 export const dynamic = "force-dynamic";

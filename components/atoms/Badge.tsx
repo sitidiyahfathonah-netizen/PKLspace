@@ -1,7 +1,6 @@
 interface BadgeProps {
-  label: string;   
+  label: string;
   variant?: "default" | "success" | "warning";
-
 }
 
 export const Badge = ({ label }: BadgeProps) => {

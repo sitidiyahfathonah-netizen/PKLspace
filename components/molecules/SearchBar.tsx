@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Input from '@/components/atoms/Input';
+import React from "react";
+import Input from "@/components/atoms/Input";
 
 interface SearchBarProps {
   value?: string;
@@ -16,7 +16,7 @@ export const SearchBar = ({
   onChange,
   onSearch,
   onFilterClick,
-  placeholder = 'cari tempat pkl....',
+  placeholder = "cari tempat pkl....",
 }: SearchBarProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +28,6 @@ export const SearchBar = ({
       onSubmit={handleSubmit}
       className="flex w-full items-center gap-2 sm:gap-3"
     >
-      {/* 1. Input Teks (Di Sebelah Kiri) */}
       <div className="flex-1 min-w-0">
         <Input
           type="text"
@@ -39,7 +38,6 @@ export const SearchBar = ({
         />
       </div>
 
-      {/* 2. Tombol Kaca Pembesar (Di Tengah - Antara Input dan Filter) */}
       <button
         type="submit"
         aria-label="Cari"
@@ -61,7 +59,6 @@ export const SearchBar = ({
         </svg>
       </button>
 
-      {/* 3. Tombol Filter (Di Sebelah Kanan) */}
       <button
         type="button"
         onClick={onFilterClick}

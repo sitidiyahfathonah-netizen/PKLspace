@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -94,7 +93,7 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
   // --- LOGIKA CABANG DINAMIS ---
   const cabangList = company.cabangs || [];
   const activeCabang = cabangList.find(
-    (c: any) => String(c.id) === String(selectedCabangId)
+    (c: any) => String(c.id) === String(selectedCabangId),
   );
 
   // Jika cabang dipilih, gunakan data cabang.
@@ -157,7 +156,7 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
 
   const totalQuota = quotaList.reduce(
     (acc: number, curr: any) => acc + Number(curr.kuota || 0),
-    0
+    0,
   );
 
   return (
@@ -291,9 +290,7 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <p className="text-[10px] text-[#7A7F8C]">
-                      Periode Magang
-                    </p>
+                    <p className="text-[10px] text-[#7A7F8C]">Periode Magang</p>
                     <p className="text-xs font-bold text-[#211B55]">
                       {company.periode || "4 bulan"}
                     </p>

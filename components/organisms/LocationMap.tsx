@@ -15,20 +15,26 @@ type LocationMapProps = {
   onSelectCabang?: (id: string | number) => void;
 };
 
-const LocationMap = ({ 
-  address, 
-  companyName, 
-  cabangList = [], 
-  selectedCabangId = "", 
-  onSelectCabang 
+const LocationMap = ({
+  address,
+  companyName,
+  cabangList = [],
+  selectedCabangId = "",
+  onSelectCabang,
 }: LocationMapProps) => {
-  const activeCabang = cabangList.find((c) => String(c.id) === String(selectedCabangId));
+  const activeCabang = cabangList.find(
+    (c) => String(c.id) === String(selectedCabangId),
+  );
 
   const currentAddress = activeCabang?.alamat || address;
   const currentName = activeCabang?.nama || companyName;
 
-  const queryText = currentName ? `${currentName}, ${currentAddress}` : currentAddress;
-  const mapsUrl = activeCabang?.tautan_google_maps || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(queryText)}`;
+  const queryText = currentName
+    ? `${currentName}, ${currentAddress}`
+    : currentAddress;
+  const mapsUrl =
+    activeCabang?.tautan_google_maps ||
+    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(queryText)}`;
 
   // Cek apakah perusahaan ini memiliki daftar cabang
   const hasCabang = cabangList && cabangList.length > 0;
@@ -59,14 +65,25 @@ const LocationMap = ({
       {/* Visual Peta Mini */}
       <div className="relative h-44 w-full overflow-hidden rounded-xl border border-[#B8C9E8] bg-[#E8EEF8]">
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#31559F_1px,transparent_1px)] [background-size:16px_16px]" />
-        
+
         <div className="absolute top-1/2 left-0 right-0 h-3 bg-white opacity-65 -translate-y-1/2 rotate-6" />
         <div className="absolute top-0 bottom-0 left-1/3 w-3 bg-white opacity-65 -rotate-12" />
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#211B55] text-white shadow-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-6 w-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"
+              />
               <circle cx="12" cy="10" r="2.5" />
             </svg>
           </div>
@@ -85,8 +102,19 @@ const LocationMap = ({
         rel="noopener noreferrer"
         className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-[#211B55] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#39339A]"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="h-4 w-4"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"
+          />
           <circle cx="12" cy="10" r="2.5" />
         </svg>
         <span>Lihat di Google Maps</span>

@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes } from "react";
 
 // Menggunakan React.InputHTMLAttributes agar mendukung semua props input bawaan HTML
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -12,11 +12,11 @@ export const Input = ({
   onChange,
   onKeyDown,
   onEnter,
-  className = '',
+  className = "",
   ...props
 }: InputProps) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       onEnter?.();
     }
     onKeyDown?.(e);

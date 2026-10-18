@@ -1,4 +1,3 @@
-
 import type { Company } from "@/types/company";
 
 const API_BASE_URL =
@@ -20,7 +19,7 @@ export async function getCompanies(params?: {
 
     if (!response.ok) {
       throw new Error(
-        `Gagal memuat data perusahaan. Status: ${response.status}`
+        `Gagal memuat data perusahaan. Status: ${response.status}`,
       );
     }
 
@@ -53,10 +52,7 @@ export async function getCompanies(params?: {
           return ["akuntansi", "akl", "keuangan lembaga"];
         }
 
-        if (
-          major.includes("manajemen perkantoran") ||
-          major === "mplb"
-        ) {
+        if (major.includes("manajemen perkantoran") || major === "mplb") {
           return ["manajemen perkantoran", "mplb", "layanan bisnis"];
         }
 
@@ -91,7 +87,7 @@ export async function getCompanies(params?: {
 
           if (item && typeof item === "object") {
             return String(
-              item.nama || item.jurusan || item.name || ""
+              item.nama || item.jurusan || item.name || "",
             ).toLowerCase();
           }
 
@@ -104,15 +100,11 @@ export async function getCompanies(params?: {
         const acceptedMajors = getMajorText(comp.jurusan_diterima);
         const quotaMajors = getMajorText(comp.kuota_jurusan);
 
-        const allMajors = [
-          mainMajor,
-          ...acceptedMajors,
-          ...quotaMajors,
-        ].join(" ");
-
-        return targetKeywords.some((keyword) =>
-          allMajors.includes(keyword)
+        const allMajors = [mainMajor, ...acceptedMajors, ...quotaMajors].join(
+          " ",
         );
+
+        return targetKeywords.some((keyword) => allMajors.includes(keyword));
       });
 
       // Utamakan perusahaan yang jurusan utamanya sesuai pilihan
@@ -121,10 +113,10 @@ export async function getCompanies(params?: {
         const mainB = String(b.jurusan_utama || "").toLowerCase();
 
         const isMainA = targetKeywords.some((keyword) =>
-          mainA.includes(keyword)
+          mainA.includes(keyword),
         );
         const isMainB = targetKeywords.some((keyword) =>
-          mainB.includes(keyword)
+          mainB.includes(keyword),
         );
 
         if (isMainA && !isMainB) return -1;
@@ -144,9 +136,7 @@ export async function getCompanies(params?: {
  * Fetch detail perusahaan berdasarkan Slug + Fetch Cabang dari /api/cabangs
  */
 
-export async function getCompanyBySlug(
-  slug: string
-): Promise<Company | null> {
+export async function getCompanyBySlug(slug: string): Promise<Company | null> {
   try {
     const companies = await getCompanies();
 
@@ -163,8 +153,7 @@ export async function getCompanyBySlug(
       return (
         compSlug === slug ||
         String(comp.id) === slug ||
-        (comp.nama &&
-          comp.nama.toLowerCase().includes(slug.replace(/-/g, " ")))
+        (comp.nama && comp.nama.toLowerCase().includes(slug.replace(/-/g, " ")))
       );
     });
 
@@ -185,7 +174,7 @@ export async function getCompanyBySlug(
 
         if (!cabangsRes.ok) {
           throw new Error(
-            `Gagal memuat data cabang. Status: ${cabangsRes.status}`
+            `Gagal memuat data cabang. Status: ${cabangsRes.status}`,
           );
         }
 
@@ -222,7 +211,6 @@ export async function getCompanyBySlug(
     throw error;
   }
 }
-
 
 /**
  * Helper untuk memperbaiki URL gambar Strapi

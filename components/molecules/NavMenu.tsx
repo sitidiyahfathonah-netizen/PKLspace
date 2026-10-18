@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { usePathname } from 'next/navigation';
-import { NavLink } from '../atoms/NavLink';
+import { usePathname } from "next/navigation";
+import { NavLink } from "../atoms/NavLink";
 
 export interface NavItem {
   label: string;
