@@ -80,7 +80,10 @@ const HomeTemplate = async () => {
             id: company.id,
             name: company.nama,
             logo: getStrapiMediaUrl(company.logo?.url),
-            description: company.informasi || "Informasi tempat PKL",
+            description:
+              company.bidang?.nama ||
+              company.kategori?.nama ||
+              "Perusahaan / Instansi",
             major: group.major,
             majors: [group.major],
             slug: company.slug,

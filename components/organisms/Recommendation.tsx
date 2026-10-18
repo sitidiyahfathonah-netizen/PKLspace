@@ -353,7 +353,7 @@ const Recommendation = ({ companies }: RecommendationProps) => {
                       key={company.id}
                       data-card-index={index}
                       className={`shrink-0 snap-center sm:snap-align-none transition-all duration-300 ease-out transform-gpu
-                        w-[80vw] max-w-[310px] sm:max-w-none sm:w-[calc((100%-48px)/2.5)] [&>article]:w-full
+                        w-[72vw] max-w-[280px] sm:max-w-none sm:w-[calc((100%-48px)/2.5)] [&>article]:w-full
                         ${
                           isZoomed
                             ? "scale-100 opacity-100 shadow-md sm:scale-100 sm:opacity-100 sm:shadow-none"
