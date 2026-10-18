@@ -18,7 +18,11 @@ export async function getCompanies(params?: {
       cache: "no-store",
     });
 
-    if (!response.ok) return [];
+    if (!response.ok) {
+      throw new Error(
+        `Gagal memuat data perusahaan. Status: ${response.status}`
+      );
+    }
 
     const result = await response.json();
     const rawData = result.data || result;
@@ -132,20 +136,21 @@ export async function getCompanies(params?: {
     return companies;
   } catch (error) {
     console.error("Error fetching companies:", error);
-    return [];
+    throw error;
   }
 }
 
 /**
  * Fetch detail perusahaan berdasarkan Slug + Fetch Cabang dari /api/cabangs
  */
-export async function getCompanyBySlug(slug: string): Promise<Company | null> {
+
+export async function getCompanyBySlug(
+  slug: string
+): Promise<Company | null> {
   try {
     const companies = await getCompanies();
 
-    if (companies.length === 0) return null;
-
-    let found = companies.find((comp: any) => {
+    const found = companies.find((comp: any) => {
       const compSlug =
         comp.slug ||
         (comp.nama
@@ -164,7 +169,7 @@ export async function getCompanyBySlug(slug: string): Promise<Company | null> {
     });
 
     if (!found) {
-      found = companies[0];
+      return null;
     }
 
     found.cabangs = [];
@@ -178,26 +183,32 @@ export async function getCompanyBySlug(slug: string): Promise<Company | null> {
           cache: "no-store",
         });
 
-        if (cabangsRes.ok) {
-          const cabangsJson = await cabangsRes.json();
-          const rawCabangsData = cabangsJson.data || cabangsJson;
+        if (!cabangsRes.ok) {
+          throw new Error(
+            `Gagal memuat data cabang. Status: ${cabangsRes.status}`
+          );
+        }
 
-          if (Array.isArray(rawCabangsData)) {
-            found.cabangs = rawCabangsData.map((item: any) => ({
-              id: item.id || item.documentId,
-              nama: item.nama || item.attributes?.nama,
-              slug: item.slug || item.attributes?.slug,
-              alamat: item.alamat || item.attributes?.alamat,
-              ringkasan: item.ringkasan || item.attributes?.ringkasan,
-              jadwal_kerja:
-                item.jadwal_kerja || item.attributes?.jadwal_kerja,
-              kuota_jurusan:
-                item.kuota_jurusan || item.attributes?.kuota_jurusan,
-              tautan_google_maps:
-                item.tautan_google_maps ||
-                item.attributes?.tautan_google_maps,
-            }));
-          }
+        const cabangsJson = await cabangsRes.json();
+        const rawCabangsData = cabangsJson.data || cabangsJson;
+
+        if (Array.isArray(rawCabangsData)) {
+          found.cabangs = rawCabangsData.map((item: any) => {
+            const data = item.attributes
+              ? { id: item.id, ...item.attributes }
+              : item;
+
+            return {
+              id: data.id || data.documentId,
+              nama: data.nama,
+              slug: data.slug,
+              alamat: data.alamat,
+              ringkasan: data.ringkasan,
+              jadwal_kerja: data.jadwal_kerja,
+              kuota_jurusan: data.kuota_jurusan,
+              tautan_google_maps: data.tautan_google_maps,
+            };
+          });
         }
       } catch (err) {
         console.error("Gagal mengambil data /api/cabangs:", err);
@@ -208,10 +219,10 @@ export async function getCompanyBySlug(slug: string): Promise<Company | null> {
     return found;
   } catch (error) {
     console.error("Error fetching company by slug:", error);
-    const companies = await getCompanies();
-    return companies[0] || null;
+    throw error;
   }
 }
+
 
 /**
  * Helper untuk memperbaiki URL gambar Strapi

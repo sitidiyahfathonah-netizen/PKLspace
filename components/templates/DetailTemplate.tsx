@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -16,7 +17,8 @@ type DetailTemplateProps = {
 const DetailTemplate = ({ slug }: DetailTemplateProps) => {
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
-  
+  const [error, setError] = useState(false);
+
   // State untuk menyimpan ID cabang yang sedang dipilih di dropdown
   const [selectedCabangId, setSelectedCabangId] = useState<string | number>("");
 
@@ -24,10 +26,14 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
     const fetchDetail = async () => {
       try {
         setLoading(true);
+        setError(false);
+        setCompany(null);
+
         const data = await getCompanyBySlug(slug);
         setCompany(data);
       } catch (error) {
         console.error("Gagal mengambil detail perusahaan:", error);
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -41,15 +47,40 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
-        <p className="text-sm font-semibold text-[#31559F]">Memuat detail tempat PKL...</p>
+        <p className="text-sm font-semibold text-[#31559F]">
+          Memuat detail tempat PKL...
+        </p>
       </div>
     );
   }
 
+  // Tampilkan pesan berbeda jika permintaan ke backend gagal
+  if (error) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-white px-4 text-center">
+        <p className="text-lg font-semibold text-slate-700">
+          Gagal memuat detail tempat PKL.
+        </p>
+        <p className="text-sm text-slate-500">
+          Silakan periksa koneksi dan coba muat halaman kembali.
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="rounded-lg bg-[#211B55] px-5 py-2 text-xs font-semibold text-white hover:bg-[#39339A]"
+        >
+          Coba Lagi
+        </button>
+      </div>
+    );
+  }
+
+  // Tampilkan pesan ini jika data berhasil dimuat tetapi tempat tidak ditemukan
   if (!company) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-white p-4">
-        <p className="text-base font-semibold text-slate-700">Tempat PKL tidak ditemukan.</p>
+        <p className="text-base font-semibold text-slate-700">
+          Tempat PKL tidak ditemukan.
+        </p>
         <Link
           href="/katalog"
           className="mt-4 rounded-lg bg-[#211B55] px-4 py-2 text-xs font-semibold text-white hover:bg-[#39339A]"
@@ -62,15 +93,23 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
 
   // --- LOGIKA CABANG DINAMIS ---
   const cabangList = company.cabangs || [];
-  const activeCabang = cabangList.find((c: any) => String(c.id) === String(selectedCabangId));
+  const activeCabang = cabangList.find(
+    (c: any) => String(c.id) === String(selectedCabangId)
+  );
 
-  // Jika cabang dipilih, gunakan data cabang. Jika tidak, gunakan data perusahaan utama.
+  // Jika cabang dipilih, gunakan data cabang.
+  // Jika tidak, gunakan data perusahaan utama.
   const displayTitle = activeCabang?.nama || company.nama;
   const displayAddress = activeCabang?.alamat || company.alamat;
-  const displayAbout = (activeCabang as any)?.ringkasan || (activeCabang ? `Cabang resmi ${company.nama} berlokasi di ${activeCabang.alamat}.` : company.informasi);
-  
-  // Jadwal kerja dinamis dari cabang yang dipilih (atau fallback ke perusahaan utama)
-  const displayWorkHours = (activeCabang as any)?.jadwal_kerja || company.jadwal_kerja;
+  const displayAbout =
+    (activeCabang as any)?.ringkasan ||
+    (activeCabang
+      ? `Cabang resmi ${company.nama} berlokasi di ${activeCabang.alamat}.`
+      : company.informasi);
+
+  // Jadwal kerja dinamis dari cabang atau perusahaan utama
+  const displayWorkHours =
+    (activeCabang as any)?.jadwal_kerja || company.jadwal_kerja;
 
   // Formatting & Parsing Data Strapi
   const logoUrl = getStrapiMediaUrl(company.logo?.url);
@@ -79,35 +118,47 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
   const requirementsList: string[] = Array.isArray(company.persyaratan)
     ? company.persyaratan
     : company.persyaratan
-    ? company.persyaratan.split("\n").map((item) => item.replace(/^[•\-\*]\s*/, "").trim()).filter(Boolean)
-    : ["Tidak ada persyaratan khusus."];
+      ? company.persyaratan
+          .split("\n")
+          .map((item) => item.replace(/^[•\-\*]\s*/, "").trim())
+          .filter(Boolean)
+      : ["Tidak ada persyaratan khusus."];
 
   // Parsing Kegiatan
   const activitiesList: string[] = Array.isArray(company.kegiatan)
     ? company.kegiatan
     : company.kegiatan
-    ? company.kegiatan.split("\n").map((item) => item.replace(/^[•\-\*]\s*/, "").trim()).filter(Boolean)
-    : ["Kegiatan akan diarahkan oleh pembimbing lapangan."];
+      ? company.kegiatan
+          .split("\n")
+          .map((item) => item.replace(/^[•\-\*]\s*/, "").trim())
+          .filter(Boolean)
+      : ["Kegiatan akan diarahkan oleh pembimbing lapangan."];
 
   // Parsing Posisi
   const positionsList: string[] = Array.isArray(company.posisi)
     ? company.posisi
     : company.posisi
-    ? [company.posisi]
-    : ["Posisi disesuaikan dengan latar belakang jurusan."];
+      ? [company.posisi]
+      : ["Posisi disesuaikan dengan latar belakang jurusan."];
 
-  // Jurusan yang Diterima teks cadangan
+  // Jurusan yang diterima
   const acceptedMajorsText =
     company.jurusan_diterima && company.jurusan_diterima.length > 0
       ? company.jurusan_diterima.join(", ")
       : company.jurusan_utama || "Semua Jurusan";
 
-  // --- PERBAIKAN KUOTA DINAMIS (CABANG / UTAMA) ---
-  const quotaList = activeCabang && (activeCabang as any).kuota_jurusan && (activeCabang as any).kuota_jurusan.length > 0
-    ? (activeCabang as any).kuota_jurusan
-    : (company.kuota_jurusan || []);
+  // --- KUOTA DINAMIS (CABANG / UTAMA) ---
+  const quotaList =
+    activeCabang &&
+    (activeCabang as any).kuota_jurusan &&
+    (activeCabang as any).kuota_jurusan.length > 0
+      ? (activeCabang as any).kuota_jurusan
+      : company.kuota_jurusan || [];
 
-  const totalQuota = quotaList.reduce((acc: number, curr: any) => acc + Number(curr.kuota || 0), 0);
+  const totalQuota = quotaList.reduce(
+    (acc: number, curr: any) => acc + Number(curr.kuota || 0),
+    0
+  );
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-white">
@@ -134,7 +185,7 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
           <span>Kembali ke Katalog</span>
         </Link>
 
-        {/* Header Perusahaan (Menggunakan displayTitle & displayAddress) */}
+        {/* Header Perusahaan */}
         <section className="mb-6 flex flex-row items-center gap-4 sm:gap-6 md:mb-10">
           <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#B8C9E8] bg-white p-2 shadow-sm sm:h-36 sm:w-36 md:h-48 md:w-56 md:rounded-2xl md:p-4">
             {logoUrl ? (
@@ -150,12 +201,14 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
           </div>
 
           <div className="min-w-0 flex-1">
-            <h1 className="text-lg font-bold text-[#211B55] sm:text-2xl md:text-3xl leading-snug">
+            <h1 className="text-lg leading-snug font-bold text-[#211B55] sm:text-2xl md:text-3xl">
               {displayTitle}
             </h1>
 
             <p className="mt-1 text-xs text-[#5F6470] sm:text-sm">
-              {company.bidang?.nama || company.kategori?.nama || "Perusahaan / Instansi"}
+              {company.bidang?.nama ||
+                company.kategori?.nama ||
+                "Perusahaan / Instansi"}
             </p>
 
             {displayAddress && (
@@ -198,15 +251,18 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
               requirements={requirementsList}
               activities={activitiesList}
               positions={positionsList}
-              workHours={displayWorkHours || "Jadwal jam kerja menyesuaikan kebijakan tempat."}
+              workHours={
+                displayWorkHours ||
+                "Jadwal jam kerja menyesuaikan kebijakan tempat."
+              }
               quotaList={quotaList}
             />
           </div>
 
           {/* Sidebar */}
           <aside className="h-fit rounded-2xl border border-[#B8C9E8] bg-white p-4 shadow-sm sm:p-5">
-            <LocationMap 
-              address={displayAddress || company.alamat || company.nama} 
+            <LocationMap
+              address={displayAddress || company.alamat || company.nama}
               companyName={company.nama}
               cabangList={cabangList}
               selectedCabangId={selectedCabangId}
@@ -235,7 +291,9 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <p className="text-[10px] text-[#7A7F8C]">Periode Magang</p>
+                    <p className="text-[10px] text-[#7A7F8C]">
+                      Periode Magang
+                    </p>
                     <p className="text-xs font-bold text-[#211B55]">
                       {company.periode || "4 bulan"}
                     </p>
@@ -260,7 +318,9 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <p className="text-[10px] text-[#7A7F8C]">Kuota Keseluruhan</p>
+                    <p className="text-[10px] text-[#7A7F8C]">
+                      Kuota Keseluruhan
+                    </p>
                     <p className="text-xs font-bold text-[#211B55]">
                       {totalQuota > 0 ? `${totalQuota} siswa` : "Menyesuaikan"}
                     </p>
