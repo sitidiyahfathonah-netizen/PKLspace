@@ -53,7 +53,6 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
     );
   }
 
-  // Tampilkan pesan berbeda jika permintaan ke backend gagal
   if (error) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-white px-4 text-center">
@@ -73,7 +72,6 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
     );
   }
 
-  // Tampilkan pesan ini jika data berhasil dimuat tetapi tempat tidak ditemukan
   if (!company) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-white p-4">
@@ -96,8 +94,6 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
     (c: any) => String(c.id) === String(selectedCabangId),
   );
 
-  // Jika cabang dipilih, gunakan data cabang.
-  // Jika tidak, gunakan data perusahaan utama.
   const displayTitle = activeCabang?.nama || company.nama;
   const displayAddress = activeCabang?.alamat || company.alamat;
   const displayAbout =
@@ -106,14 +102,11 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
       ? `Cabang resmi ${company.nama} berlokasi di ${activeCabang.alamat}.`
       : company.informasi);
 
-  // Jadwal kerja dinamis dari cabang atau perusahaan utama
   const displayWorkHours =
     (activeCabang as any)?.jadwal_kerja || company.jadwal_kerja;
 
-  // Formatting & Parsing Data Strapi
   const logoUrl = getStrapiMediaUrl(company.logo?.url);
 
-  // Parsing Persyaratan
   const requirementsList: string[] = Array.isArray(company.persyaratan)
     ? company.persyaratan
     : company.persyaratan
@@ -123,7 +116,6 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
           .filter(Boolean)
       : ["Tidak ada persyaratan khusus."];
 
-  // Parsing Kegiatan
   const activitiesList: string[] = Array.isArray(company.kegiatan)
     ? company.kegiatan
     : company.kegiatan
@@ -133,20 +125,17 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
           .filter(Boolean)
       : ["Kegiatan akan diarahkan oleh pembimbing lapangan."];
 
-  // Parsing Posisi
   const positionsList: string[] = Array.isArray(company.posisi)
     ? company.posisi
     : company.posisi
       ? [company.posisi]
       : ["Posisi disesuaikan dengan latar belakang jurusan."];
 
-  // Jurusan yang diterima
   const acceptedMajorsText =
     company.jurusan_diterima && company.jurusan_diterima.length > 0
       ? company.jurusan_diterima.join(", ")
       : company.jurusan_utama || "Semua Jurusan";
 
-  // --- KUOTA DINAMIS (CABANG / UTAMA) ---
   const quotaList =
     activeCabang &&
     (activeCabang as any).kuota_jurusan &&
@@ -158,6 +147,8 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
     (acc: number, curr: any) => acc + Number(curr.kuota || 0),
     0,
   );
+
+  const hasCabang = cabangList && cabangList.length > 0;
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-white">
@@ -241,7 +232,28 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
           </div>
         </section>
 
-        {/* Konten Utama */}
+        {/* --- KHUSUS MOBILE: Dropdown Pilih Cabang (Satu-Satunya di Mobile, Tanpa Card, Teks di Tengah) --- */}
+        {hasCabang && (
+          <div className="mb-6 block lg:hidden w-full px-2">
+            <label className="mb-2 block text-center text-xs font-bold text-[#211B55]">
+              Pilih Cabang {company.nama} :
+            </label>
+            <select
+              value={selectedCabangId}
+              onChange={(e) => setSelectedCabangId(e.target.value)}
+              className="w-full rounded-xl border border-[#B8C9E8] bg-white px-3 py-2.5 text-xs font-medium text-[#211B55] outline-none transition focus:border-[#31559F]"
+            >
+              <option value="">-- Pilih Cabang --</option>
+              {cabangList.map((cabang: any, idx: number) => (
+                <option key={cabang.id || idx} value={cabang.id}>
+                  {cabang.nama}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Konten Utama & Sidebar */}
         <div className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0">
             <CompanyDetail
@@ -260,13 +272,28 @@ const DetailTemplate = ({ slug }: DetailTemplateProps) => {
 
           {/* Sidebar */}
           <aside className="h-fit rounded-2xl border border-[#B8C9E8] bg-white p-4 shadow-sm sm:p-5">
-            <LocationMap
-              address={displayAddress || company.alamat || company.nama}
-              companyName={company.nama}
-              cabangList={cabangList}
-              selectedCabangId={selectedCabangId}
-              onSelectCabang={(id) => setSelectedCabangId(id)}
-            />
+            {/* Tampilan DESKTOP: Menampilkan LocationMap lengkap dengan dropdown */}
+            <div className="hidden lg:block">
+              <LocationMap
+                address={displayAddress || company.alamat || company.nama}
+                companyName={company.nama}
+                cabangList={cabangList}
+                selectedCabangId={selectedCabangId}
+                onSelectCabang={(id) => setSelectedCabangId(id)}
+              />
+            </div>
+
+            {/* Tampilan MOBILE: Menampilkan LocationMap TANPA dropdown (karena dropdown sudah di atas) */}
+            <div className="block lg:hidden">
+              <LocationMap
+                address={displayAddress || company.alamat || company.nama}
+                companyName={company.nama}
+                cabangList={cabangList}
+                selectedCabangId={selectedCabangId}
+                onSelectCabang={(id) => setSelectedCabangId(id)}
+                hideDropdown={true}
+              />
+            </div>
 
             <div className="mt-5">
               <h2 className="text-sm font-bold text-[#211B55] sm:text-base">
