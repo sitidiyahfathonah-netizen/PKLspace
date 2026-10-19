@@ -4,7 +4,7 @@
 
 **Product Name:** PKLspace
 
-**Product Type:** Web-based PKL information platform
+**Product Type:** Web-based PKL Information Platform
 
 **Production URL:** https://pklspace.vercel.app/
 
@@ -52,8 +52,8 @@ Tim pengembang bertanggung jawab membangun frontend, mengintegrasikan backend, s
 
 - Halaman beranda dan rekomendasi tempat PKL.
 - Katalog tempat PKL.
-- Pencarian tempat PKL berdasarkan nama.
-- Filter berdasarkan jurusan.
+- Pencarian tempat PKL berdasarkan nama melalui backend API.
+- Filter tempat PKL berdasarkan jurusan.
 - Pengelompokan hasil katalog berdasarkan kecocokan jurusan sesuai implementasi aplikasi.
 - Halaman detail tempat PKL.
 - Informasi jurusan yang diterima dan kuota berdasarkan data yang tersedia.
@@ -78,14 +78,14 @@ Fitur berikut tidak termasuk dalam cakupan aplikasi saat ini:
 
 PKLspace mendukung informasi tempat PKL untuk empat jurusan:
 
-| Code | Major                                    |
-| ---- | ---------------------------------------- |
-| PPLG | Pengembangan Perangkat Lunak dan Gim     |
-| AKL  | Akuntansi dan Keuangan Lembaga           |
+| Code | Major |
+| --- | --- |
+| PPLG | Pengembangan Perangkat Lunak dan Gim |
+| AKL | Akuntansi dan Keuangan Lembaga |
 | MPLB | Manajemen Perkantoran dan Layanan Bisnis |
-| PM   | Pemasaran                                |
+| PM | Pemasaran |
 
-Kesesuaian tempat PKL ditentukan berdasarkan data jurusan yang tersedia dari backend.
+Kesesuaian tempat PKL ditentukan berdasarkan data jurusan yang tersedia dari backend dan logika pencocokan yang diterapkan pada frontend.
 
 ## 7. Functional Requirements
 
@@ -102,28 +102,31 @@ Sistem menampilkan halaman beranda yang berisi pengenalan PKLspace, rekomendasi 
 
 ### FR-02: Company Catalog
 
-Sistem menampilkan daftar tempat PKL yang datanya diperoleh dari backend.
+Sistem menampilkan daftar tempat PKL yang datanya diperoleh dari backend API.
 
 **Acceptance criteria:**
 
 - Sistem mengambil data perusahaan melalui backend API.
-- Permintaan katalog menggunakan batas maksimal 100 data per permintaan melalui parameter `pagination[pageSize]=100`.
+- Permintaan katalog menggunakan parameter `pagination[pageSize]=100` untuk membatasi jumlah data dalam satu permintaan.
 - Data yang berhasil diterima digunakan untuk menampilkan kartu tempat PKL.
 - Kartu dapat menampilkan nama tempat PKL, logo jika tersedia, dan informasi bidang atau jurusan yang relevan.
 - Pengguna dapat membuka halaman detail melalui kartu tempat PKL.
 - Sistem menangani proses pemuatan, kegagalan pengambilan data, dan kondisi ketika data tidak tersedia.
-- Katalog saat ini belum menyediakan pagination atau fitur Load More untuk mengambil data berikutnya.
+- Katalog belum menyediakan pagination atau fitur Load More untuk mengambil data berikutnya.
 
-**Batasan:** Data yang dapat dicari dan difilter di frontend dibatasi oleh data yang berhasil diterima dari backend. Jika jumlah tempat PKL melebihi batas pengambilan, data di luar hasil permintaan tersebut belum tentu muncul di katalog.
+**Batasan:**
+
+Data yang dapat ditampilkan, dicari, dan difilter dibatasi oleh data yang berhasil diterima dari backend. Jika jumlah tempat PKL melebihi batas pengambilan, data di luar hasil permintaan tersebut belum tentu muncul di katalog.
 
 ### FR-03: Search
 
-Sistem menyediakan pencarian tempat PKL berdasarkan nama.
+Sistem menyediakan pencarian tempat PKL berdasarkan nama melalui filter pada backend API.
 
 **Acceptance criteria:**
 
 - Pengguna dapat memasukkan kata kunci pencarian.
-- Sistem menyaring data yang tersedia berdasarkan nama tempat PKL.
+- Frontend mengirimkan kata kunci pencarian ke backend menggunakan parameter filter nama yang didukung oleh Strapi.
+- Backend memproses filter nama dan mengembalikan data yang sesuai dengan kata kunci.
 - Pencarian dapat digunakan bersama filter jurusan.
 - Jika tidak ada hasil yang sesuai, sistem menampilkan kondisi kosong atau pesan yang sesuai.
 
@@ -135,10 +138,14 @@ Sistem menyediakan filter berdasarkan jurusan PPLG, AKL, MPLB, dan PM.
 
 - Pengguna dapat memilih jurusan melalui kontrol filter.
 - Pengguna dapat menerapkan dan mengatur ulang filter sesuai fitur yang tersedia.
-- Katalog menyesuaikan hasil berdasarkan jurusan yang dipilih.
+- Frontend menyesuaikan hasil berdasarkan jurusan yang dipilih menggunakan data yang diterima dari backend.
 - Hasil dapat dikelompokkan berdasarkan kecocokan jurusan utama dan pilihan tempat PKL lain yang relevan sesuai implementasi aplikasi.
 - Jika filter direset, katalog kembali menampilkan hasil tanpa filter jurusan.
-- Hasil filter bergantung pada data yang berhasil diambil dan informasi jurusan yang tersedia.
+- Hasil filter bergantung pada data yang berhasil diambil serta informasi jurusan yang tersedia.
+
+**Batasan:**
+
+Filter jurusan saat ini masih diproses di frontend. Filter tersebut hanya dapat memproses data yang diterima dari backend, dengan batas pengambilan maksimal 100 data per permintaan.
 
 ### FR-05: Company Detail
 
@@ -150,7 +157,8 @@ Sistem menyediakan halaman detail untuk menampilkan informasi tempat PKL.
 - Informasi dapat mencakup deskripsi, persyaratan, kegiatan, posisi, jurusan yang diterima, kuota, periode, dan jadwal kerja sesuai kelengkapan data.
 - Alamat dan tautan Google Maps ditampilkan jika tersedia.
 - Jika logo tidak tersedia, sistem menggunakan tampilan pengganti sesuai implementasi.
-- Informasi cabang ditampilkan apabila tersedia dan didukung oleh implementasi untuk perusahaan terkait.
+- Informasi cabang dan pilihan cabang ditampilkan untuk perusahaan yang memiliki data cabang dan didukung oleh implementasi aplikasi.
+- Perusahaan tanpa data cabang tidak harus menampilkan pilihan cabang.
 - Sistem menangani proses pemuatan data.
 - Jika data detail tidak ditemukan atau gagal dimuat, sistem menampilkan penanganan yang sesuai dan menyediakan navigasi kembali ke katalog jika tersedia.
 
@@ -211,10 +219,10 @@ Fungsi komunikasi dengan backend dikelola di `lib/api.ts`.
 
 Endpoint utama yang digunakan:
 
-| Endpoint           | Purpose                                                    |
-| ------------------ | ---------------------------------------------------------- |
-| `/api/perusahaans` | Mengambil data perusahaan atau tempat PKL.                 |
-| `/api/cabangs`     | Mengambil data cabang untuk kebutuhan perusahaan tertentu. |
+| Endpoint | Purpose |
+| --- | --- |
+| `/api/perusahaans` | Mengambil data perusahaan atau tempat PKL, termasuk pencarian berdasarkan nama. |
+| `/api/cabangs` | Mengambil data cabang untuk kebutuhan perusahaan tertentu. |
 
 Definisi tipe data perusahaan berada di `types/company.ts`.
 
@@ -222,21 +230,23 @@ Alamat dasar API dapat diatur melalui `NEXT_PUBLIC_API_BASE_URL`. Jika variabel 
 
 ## 10. Main Routes
 
-| Route           | Purpose                                               |
-| --------------- | ----------------------------------------------------- |
-| `/`             | Beranda.                                              |
-| `/about`        | Halaman Tentang.                                      |
-| `/katalog`      | Katalog tempat PKL.                                   |
+| Route | Purpose |
+| --- | --- |
+| `/` | Beranda. |
+| `/about` | Halaman Tentang. |
+| `/katalog` | Katalog tempat PKL. |
 | `/katalog/[id]` | Halaman detail tempat PKL berdasarkan parameter rute. |
 
 ## 11. Assumptions and Constraints
 
 - Ketersediaan data tempat PKL bergantung pada backend API.
 - Katalog saat ini mengambil maksimal 100 data perusahaan per permintaan.
-- Pencarian dan filter frontend hanya dapat memproses data yang berhasil diterima.
+- Pencarian nama diproses melalui filter backend, sedangkan filter jurusan diproses di frontend.
+- Filter jurusan hanya dapat memproses data yang berhasil diterima.
 - Pagination dan fitur Load More belum tersedia pada katalog.
 - Informasi kuota mengikuti data dari backend dan tidak selalu menunjukkan sisa kuota aktual.
 - Tidak semua tempat PKL memiliki logo, informasi cabang, atau data lengkap untuk setiap bagian detail.
+- Informasi lokasi dan Google Maps ditampilkan sesuai ketersediaan data serta dukungan implementasi.
 - Informasi yang ditampilkan bergantung pada kelengkapan dan keakuratan data backend.
 - Pengelolaan data tempat PKL dilakukan di luar frontend saat ini.
 
@@ -245,7 +255,7 @@ Alamat dasar API dapat diatur melalui `NEXT_PUBLIC_API_BASE_URL`. Jika variabel 
 PKLspace dianggap memenuhi tujuan utamanya apabila:
 
 1. Siswa dapat mengakses daftar tempat PKL.
-2. Siswa dapat mencari dan memfilter tempat PKL berdasarkan jurusan menggunakan data yang tersedia.
+2. Siswa dapat mencari tempat PKL berdasarkan nama dan memfilter tempat PKL berdasarkan jurusan menggunakan data yang tersedia.
 3. Siswa dapat membuka halaman detail dan membaca informasi tempat PKL yang tersedia.
 4. Rekomendasi tempat PKL dapat mengarahkan pengguna ke katalog dengan jurusan yang sesuai.
 5. Antarmuka dapat digunakan pada perangkat desktop dan ponsel.
@@ -256,7 +266,7 @@ PKLspace dianggap memenuhi tujuan utamanya apabila:
 Pengembangan selanjutnya dapat mempertimbangkan:
 
 - Penambahan pagination atau fitur Load More pada katalog.
-- Pemindahan pencarian dan filter ke backend agar dapat memproses data dalam jumlah lebih besar.
+- Pemindahan filter jurusan ke backend agar dapat memproses data dalam jumlah lebih besar.
 - Penyempurnaan validasi dan pencocokan jurusan.
 - Peningkatan penanganan kesalahan ketika backend tidak tersedia.
 - Penambahan dan pemeliharaan data tempat PKL yang lebih lengkap.

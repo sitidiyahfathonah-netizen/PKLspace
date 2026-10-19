@@ -1,6 +1,6 @@
 # Development Commands
 
-Dokumen ini menjelaskan perintah untuk menginstal dependensi, menjalankan, memeriksa, dan membangun aplikasi frontend PKLspace, serta perintah Git yang dapat digunakan selama pengembangan.
+Dokumen ini menjelaskan perintah untuk menginstal dependensi, menjalankan, memeriksa, dan membangun aplikasi frontend PKLspace, serta perintah Git yang digunakan selama pengembangan.
 
 ## 1. Prerequisites
 
@@ -12,17 +12,17 @@ Pastikan perangkat sudah memiliki:
 
 ## 2. Installation
 
-### Install dependencies
+### Install Dependencies
 
-Jalankan dari direktori root proyek:
+Jalankan perintah berikut dari direktori root proyek:
 
 ```bash
 npm install
 ```
 
-Menginstal dependensi yang tercantum dalam `package.json`.
+Perintah ini menginstal dependensi yang tercantum dalam `package.json`.
 
-### Configure environment variables
+### Configure Environment Variables
 
 Frontend mendukung variabel lingkungan berikut:
 
@@ -30,17 +30,17 @@ Frontend mendukung variabel lingkungan berikut:
 | --- | --- |
 | `NEXT_PUBLIC_API_BASE_URL` | Alamat dasar backend API yang digunakan frontend. |
 
-Jika ingin menggunakan alamat backend yang berbeda, buat file `.env.local` di direktori root proyek:
+Untuk menggunakan alamat backend yang berbeda, buat file `.env.local` di direktori root proyek:
 
 ```env
 NEXT_PUBLIC_API_BASE_URL=https://pkl-space-backend-production.up.railway.app
 ```
 
-Variabel ini bersifat opsional karena frontend memiliki alamat backend bawaan. Jika variabel ditentukan, frontend menggunakan alamat tersebut sesuai implementasi di `lib/api.ts`.
+Variabel ini bersifat opsional karena frontend memiliki alamat backend bawaan. Jika ditentukan, nilai variabel digunakan sesuai implementasi dalam `lib/api.ts`.
 
 ## 3. Development
 
-### Start development server
+### Start Development Server
 
 ```bash
 npm run dev
@@ -48,7 +48,7 @@ npm run dev
 
 Menjalankan server pengembangan Next.js. Secara default, aplikasi dapat diakses melalui `http://localhost:3000`.
 
-### Stop development server
+### Stop Development Server
 
 Tekan `Ctrl + C` di terminal tempat server berjalan.
 
@@ -62,15 +62,17 @@ npm run lint
 
 Memeriksa kode menggunakan ESLint berdasarkan konfigurasi proyek. Periksa dan perbaiki masalah yang dilaporkan sebelum mengajukan perubahan.
 
-### Build for production
+### Build for Production
 
 ```bash
 npm run build
 ```
 
-Membuat build aplikasi untuk produksi. Pastikan proses build berhasil sebelum melakukan deployment.
+Membuat build aplikasi untuk produksi. Proses build Next.js juga mencakup pemeriksaan TypeScript.
 
-### Start production server
+**Hasil validasi:** Perintah `npm run build` berhasil dijalankan tanpa kesalahan pada pemeriksaan TypeScript.
+
+### Start Production Server
 
 ```bash
 npm run start
@@ -84,23 +86,21 @@ Menjalankan aplikasi menggunakan hasil build produksi. Jalankan `npm run build` 
 npx tsc --noEmit
 ```
 
-Memeriksa kesalahan tipe TypeScript tanpa menghasilkan file JavaScript.
-
-Perintah ini dijalankan langsung melalui TypeScript compiler dan bukan script khusus dalam `package.json`.
+Memeriksa kesalahan tipe TypeScript tanpa menghasilkan file JavaScript. Perintah ini dapat digunakan sebagai pemeriksaan tambahan di luar proses build.
 
 ## 6. Git Workflow
 
-Perintah berikut merupakan referensi untuk mengelola perubahan. Sesuaikan dengan branch dan file yang sedang dikerjakan.
+Perintah berikut merupakan referensi untuk mengelola perubahan kode maupun dokumentasi.
 
-### Check working tree
+### Check Working Tree
 
 ```bash
 git status
 ```
 
-Menampilkan branch aktif serta status perubahan file.
+Menampilkan branch aktif dan status perubahan file.
 
-### List local branches
+### List Local Branches
 
 ```bash
 git branch
@@ -108,15 +108,15 @@ git branch
 
 Menampilkan branch lokal yang tersedia. Tanda `*` menunjukkan branch aktif.
 
-### Create a feature or documentation branch
+### Create a Documentation Branch
 
 ```bash
 git switch -c docs/your-task-name
 ```
 
-Membuat branch baru sekaligus berpindah ke branch tersebut. Ganti nama contoh dengan nama branch yang sesuai dan pastikan branch tersebut belum ada.
+Membuat branch baru sekaligus berpindah ke branch tersebut. Ganti `docs/your-task-name` dengan nama branch yang sesuai.
 
-### Stage changes
+### Stage Documentation Changes
 
 ```bash
 git add README.md docs/commands.md docs/PRD.md
@@ -124,7 +124,7 @@ git add README.md docs/commands.md docs/PRD.md
 
 Menambahkan file dokumentasi yang dipilih ke staging area. Sesuaikan daftar file dengan perubahan yang ingin disertakan dalam commit.
 
-### Commit changes
+### Commit Changes
 
 ```bash
 git commit -m "docs: update project documentation"
@@ -132,24 +132,24 @@ git commit -m "docs: update project documentation"
 
 Menyimpan perubahan yang sudah di-stage ke riwayat Git.
 
-### Push branch
+### Push Branch
 
 ```bash
 git push -u origin docs/your-task-name
 ```
 
-Mengirim branch ke repositori remote. Ganti `docs/your-task-name` dengan nama branch aktif yang sebenarnya.
+Mengirim branch ke repositori remote. Ganti nama contoh dengan nama branch yang sebenarnya.
 
 ## 7. Available npm Scripts
 
-Script yang tersedia dalam `package.json`:
+Script berikut tersedia dalam `package.json` proyek:
 
-| Script  | Command         | Purpose                            |
-| ------- | --------------- | ---------------------------------- |
-| `dev`   | `npm run dev`   | Menjalankan server pengembangan.   |
-| `lint`  | `npm run lint`  | Memeriksa kode menggunakan ESLint. |
-| `build` | `npm run build` | Membuat build produksi.            |
-| `start` | `npm run start` | Menjalankan server produksi.       |
+| Script | Command | Purpose |
+| --- | --- | --- |
+| `dev` | `npm run dev` | Menjalankan server pengembangan. |
+| `lint` | `npm run lint` | Memeriksa kode menggunakan ESLint. |
+| `build` | `npm run build` | Membuat build produksi. |
+| `start` | `npm run start` | Menjalankan server produksi. |
 
 ## 8. Notes
 
@@ -157,6 +157,6 @@ Script yang tersedia dalam `package.json`:
 - Pastikan dependensi sudah terinstal sebelum menjalankan aplikasi.
 - Pastikan backend dapat diakses agar data tempat PKL dapat dimuat.
 - Jangan commit file `.env.local` yang berisi konfigurasi lokal.
-- Periksa hasil lint dan build sebelum mengajukan Pull Request.
+- Jalankan pemeriksaan yang relevan sebelum mengajukan Pull Request.
 - Pull Request digunakan untuk meninjau perubahan sebelum digabungkan ke branch utama.
 - Perintah dalam dokumen ini dijalankan sesuai kebutuhan dan tidak berjalan otomatis, kecuali dikonfigurasi secara terpisah.
