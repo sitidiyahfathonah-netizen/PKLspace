@@ -24,10 +24,10 @@ export const AboutTemplate = () => {
                 Mengenal Aplikasi PKLspace
               </h1>
               <p className="text-[10px] sm:text-sm md:text-base font-light leading-relaxed sm:leading-normal text-blue-900">
-                Aplikasi PKL hadir untuk membantu siswa SMK dalam menemukan
-                informasi tempat PKL yang sesuai dengan jurusan mereka. Kami
-                percaya bahwa pengalaman PKL adalah langkah penting menuju masa
-                depan karier yang lebih baik.
+                Aplikasi PKLspace hadir untuk membantu siswa SMKN 2 Sumedang dalam
+                menemukan informasi tempat PKL yang sesuai dengan jurusan mereka.
+                Kami percaya bahwa pengalaman PKL adalah langkah penting menuju
+                masa depan karier yang lebih baik.
               </p>
             </div>
           </div>
@@ -39,7 +39,7 @@ export const AboutTemplate = () => {
               Solusi Mudah untuk Mencari Tempat PKL
             </h2>
             <p className="text-[10px] sm:text-xs md:text-sm text-blue-900 max-w-xl mx-auto mb-6 sm:mb-10 lg:mb-12 leading-relaxed">
-              Aplikasi PKL adalah platform yang menyediakan informasi lengkap
+              Aplikasi PKLspace adalah platform yang menyediakan informasi lengkap
               mengenai tempat PKL, mulai dari detail perusahaan, jurusan yang
               diterima, hingga lokasi agar mudah diakses oleh siswa SMK
             </p>
