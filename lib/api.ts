@@ -13,6 +13,13 @@ export async function getCompanies(params?: {
     url.searchParams.set("pagination[pageSize]", "100");
     url.searchParams.set("populate", "*");
 
+    if (params?.search?.trim()) {
+      url.searchParams.set(
+        "filters[nama][$containsi]",
+        params.search.trim(),
+      );
+    }
+
     const response = await fetch(url.toString(), {
       cache: "no-store",
     });
@@ -32,16 +39,6 @@ export async function getCompanies(params?: {
       }
       return item;
     });
-
-    // Filter pencarian nama perusahaan
-    if (params?.search?.trim()) {
-      const keyword = params.search.trim().toLowerCase();
-
-      companies = companies.filter((comp) => {
-        const name = String(comp.nama || comp.name || "").toLowerCase();
-        return name.includes(keyword);
-      });
-    }
 
     // Filter jurusan
     if (params?.jurusan?.trim() && params.jurusan.trim() !== "Semua") {
