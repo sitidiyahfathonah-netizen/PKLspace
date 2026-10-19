@@ -139,7 +139,7 @@ const CatalogTemplate = () => {
 
       <section className="px-4 pb-12 sm:px-6">
         <div className="mx-auto max-w-[1200px]">
-          <h1 className="mb-6 block text-xl font-bold text-[#181838] sm:mb-8 sm:text-2xl">
+          <h1 className="sr-only sm:not-sr-only sm:block sm:mb-8 text-xl font-bold text-[#181838] sm:text-2xl">
             {getCatalogTitle()}
           </h1>
 

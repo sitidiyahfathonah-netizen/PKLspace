@@ -359,6 +359,7 @@ const Recommendation = ({ companies }: RecommendationProps) => {
                         description={company.description}
                         major={company.major}
                         slug={company.slug}
+                        layout="vertical"
                       />
                     </div>
                   );
