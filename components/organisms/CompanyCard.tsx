@@ -11,6 +11,7 @@ interface CompanyCardProps {
   major: string;
   slug?: string;
   className?: string;
+  layout?: "responsive" | "vertical" | "horizontal";
 }
 
 export const CompanyCard = ({
@@ -21,12 +22,15 @@ export const CompanyCard = ({
   major,
   slug,
   className = "",
+  layout = "responsive",
 }: CompanyCardProps) => {
   const detailHref = slug
     ? `/katalog/${slug}`
     : id !== undefined
       ? `/katalog/${id}`
       : "/katalog";
+
+  const isVertical = layout === "vertical";
 
   return (
     <article
@@ -36,61 +40,83 @@ export const CompanyCard = ({
         MOBILE: Kanan-kiri (Flex Row - Foto di Kiri, Teks di Kanan)
         DESKTOP (md:): Atas-bawah (Flex Col - Foto di Atas, Teks di Bawah)
       */}
-      <div className="flex flex-col items-stretch gap-3.5">
-        {/* LOGO CONTAINER: Lebar di mobile, penuh di desktop */}
-        <div className="relative flex h-[130px] w-full shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-3 md:mb-4 md:h-[180px] md:p-4">
-         <Image
-  src={logo}
-  alt={`Logo ${name}`}
-  fill
-  sizes="(max-width: 768px) 115px, (max-width: 1200px) 40vw, 500px"
-  className="object-contain p-1"
-  unoptimized
-/>
+      <div
+        className={
+          isVertical
+            ? "flex flex-col items-stretch"
+            : "flex flex-row md:flex-col items-center md:items-stretch gap-3 sm:gap-3.5 md:gap-0"
+        }
+      >
+        {/* LOGO CONTAINER: Kotak di mobile samping, penuh di desktop */}
+        <div
+          className={
+            isVertical
+              ? "relative flex h-[130px] md:h-[180px] w-full shrink-0 mb-3 md:mb-4 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-3 md:p-4"
+              : "relative flex h-[100px] w-[120px] sm:h-[105px] sm:w-[130px] md:h-[180px] md:w-full shrink-0 md:mb-4 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-2 sm:p-3 md:p-4"
+          }
+        >
+          <Image
+            src={logo}
+            alt={`Logo ${name}`}
+            fill
+            sizes="(max-width: 768px) 130px, (max-width: 1200px) 40vw, 500px"
+            className="object-contain p-1.5 sm:p-2"
+            unoptimized
+          />
         </div>
 
         {/* INFO CONTAINER */}
         <div className="flex min-w-0 flex-1 flex-col justify-center">
           <h3
-            className="line-clamp-2 text-xs md:text-lg font-bold text-[#181838] leading-snug"
+            className="line-clamp-2 text-sm sm:text-base md:text-lg font-bold text-[#181838] leading-snug"
             title={name}
           >
             {name}
           </h3>
 
-          <p className="mt-0.5 md:mt-1 line-clamp-1 text-[11px] md:text-sm text-slate-500">
+          <p className="mt-0.5 sm:mt-1 line-clamp-1 text-xs md:text-sm text-slate-500">
             {description}
           </p>
 
           {/* Badge Jurusan */}
-          <div className="mt-2 md:mt-3">
-            <div className="inline-flex max-w-full items-center gap-1 rounded-full border border-blue-200 bg-[#EAF0FF] px-2 md:px-3 py-0.5 md:py-1 text-[9px] md:text-xs font-medium text-[#1E254B]">
+          <div className="mt-2 sm:mt-2.5">
+            <div className="inline-flex max-w-full items-center gap-1.5 rounded-xl md:rounded-full bg-[#CCE1FF] px-2.5 py-1 text-[10px] sm:text-xs font-medium text-[#1E254B] leading-tight">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3 md:h-3.5 md:w-3.5 shrink-0 text-[#25448C]"
+                className="h-3.5 w-3.5 shrink-0 text-[#1E254B]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                strokeWidth={2}
+                strokeWidth={1.8}
               >
+                <rect x="3" y="7" width="18" height="13" rx="2" />
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth="3"
-                  d="M20 7h-4V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2ZM9 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V5Z"
+                  d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                />
+                <rect
+                  x="10.5"
+                  y="11"
+                  width="3"
+                  height="2.5"
+                  rx="0.5"
+                  strokeWidth={1.5}
                 />
               </svg>
-              <span className="truncate">{major}</span>
+              <span className="leading-tight line-clamp-2 break-words">
+                {major}
+              </span>
             </div>
           </div>
         </div>
       </div>
 
       {/* TOMBOL DETAIL: Membentang penuh di bawah */}
-      <div className="mt-3.5 md:mt-5 pt-2.5 md:pt-3 border-t border-slate-100">
+      <div className="mt-3 sm:mt-3.5 md:mt-4">
         <Link
           href={detailHref}
-          className="flex w-full items-center justify-center rounded-xl bg-[#181838] py-2 md:py-3 text-center text-xs md:text-sm font-semibold text-white transition duration-200 hover:bg-[#252554] active:scale-[0.98]"
+          className="flex w-full items-center justify-center rounded-xl bg-[#181838] py-2 sm:py-2.5 md:py-3 text-center text-sm md:text-base font-bold text-white transition duration-200 hover:bg-[#252554] active:scale-[0.98]"
         >
           Detail
         </Link>
