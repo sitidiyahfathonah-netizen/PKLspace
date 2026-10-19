@@ -30,7 +30,7 @@ export const CompanyCard = ({
 
   return (
     <article
-      className={`w-full min-h-[410px] md:min-h-0 overflow-hidden rounded-2xl border border-slate-200 bg-white p-3.5 md:p-5 shadow-sm transition-all duration-300 hover:shadow-md flex flex-col justify-between ${className}`}
+      className={`w-full overflow-hidden rounded-2xl border border-slate-200 bg-white p-3.5 md:p-5 shadow-sm transition-all duration-300 hover:shadow-md flex flex-col justify-between ${className}`}
     >
       {/* 
         MOBILE: Kanan-kiri (Flex Row - Foto di Kiri, Teks di Kanan)
@@ -38,14 +38,15 @@ export const CompanyCard = ({
       */}
       <div className="flex flex-col items-stretch gap-3.5">
         {/* LOGO CONTAINER: Lebar di mobile, penuh di desktop */}
-        <div className="relative flex h-[175px] w-full shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-3 md:mb-4 md:h-[180px] md:p-4">
-          <Image
-            src={logo}
-            alt={`Logo ${name}`}
-            fill
-            sizes="(max-width: 768px) 115px, 100vw"
-            className="object-contain p-1"
-          />
+        <div className="relative flex h-[130px] w-full shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-3 md:mb-4 md:h-[180px] md:p-4">
+         <Image
+  src={logo}
+  alt={`Logo ${name}`}
+  fill
+  sizes="(max-width: 768px) 115px, (max-width: 1200px) 40vw, 500px"
+  className="object-contain p-1"
+  unoptimized
+/>
         </div>
 
         {/* INFO CONTAINER */}
