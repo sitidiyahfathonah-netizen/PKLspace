@@ -67,7 +67,9 @@ const HomeTemplate = async () => {
 
   const recommendationCompanies = recommendationGroups.flatMap((group) =>
     group.companies.flatMap((aliases) => {
-      const company = companies.find((item) => matchesName(item.nama, aliases));
+      const company = companies.find((item) =>
+        matchesName(item.nama, aliases),
+      );
 
       if (!company) return [];
 
