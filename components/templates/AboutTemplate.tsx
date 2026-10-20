@@ -41,7 +41,7 @@ export const AboutTemplate = () => {
             <p className="text-[10px] sm:text-xs md:text-sm text-blue-900 max-w-xl mx-auto mb-6 sm:mb-10 lg:mb-12 leading-relaxed">
               Aplikasi PKLspace adalah platform yang menyediakan informasi lengkap
               mengenai tempat PKL, mulai dari detail perusahaan, jurusan yang
-              diterima, hingga lokasi agar mudah diakses oleh siswa SMK
+              diterima, hingga lokasi agar mudah diakses oleh siswa SMKN 2 Sumedang
             </p>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
@@ -155,10 +155,10 @@ export const AboutTemplate = () => {
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 lg:gap-10">
               <div className="w-full lg:max-w-[620px] border border-blue-300/80 lg:border-blue-200/80 rounded-2xl p-4 sm:p-6 md:p-8 bg-white shadow-sm">
                 <h3 className="text-sm sm:text-base md:text-lg font-bold text-blue-950 mb-2.5 sm:mb-3">
-                  Dirancang Khusus untuk Kebutuhan Siswa SMK
+                  Dirancang Khusus untuk Kebutuhan Siswa SMKN 2 Sumedang
                 </h3>
                 <ul className="space-y-2 sm:space-y-2.5 text-[10px] sm:text-xs md:text-sm text-blue-900 list-disc pl-4 sm:pl-5 leading-relaxed sm:leading-normal">
-                  <li>Siswa lebih mudah menemukan informasi tempat PKL.</li>
+                  <li>Siswa SMKN 2 Sumedang lebih mudah menemukan informasi tempat PKL.</li>
                   <li>
                     Siswa dapat memahami dan mempertimbangkan pilihan tempat PKL
                     berdasarkan informasi yang tersedia.
