@@ -150,12 +150,9 @@ function TipCardDesktop({ tip }: { tip: (typeof tips)[number] }) {
       {/* Bagian Atas: Ikon + Judul */}
       <div className="flex shrink-0 flex-col items-center">
         <div className="flex shrink-0 items-center justify-center text-[#211B55]">
-          <TipIcon
-            type={tip.icon}
-            className="h-10 w-10 sm:h-11 sm:w-11 lg:h-12 lg:w-12 xl:h-13 xl:w-13 shrink-0"
-          />
+          <TipIcon type={tip.icon} />
         </div>
-        <h3 className="mt-1.5 flex min-h-[26px] shrink-0 items-center justify-center text-center text-xs font-bold leading-tight sm:text-[13px] md:text-sm lg:text-[15px] xl:text-[15.5px]">
+       <h3 className="mt-1 flex min-h-[26px] shrink-0 items-center justify-center text-center text-xs font-bold leading-tight sm:text-[13px] md:text-sm lg:text-[15px]">
           {tip.title}
         </h3>
       </div>
@@ -164,7 +161,7 @@ function TipCardDesktop({ tip }: { tip: (typeof tips)[number] }) {
       <div className="my-1.5 h-px w-full shrink-0 bg-[#7786A6] sm:my-2 lg:my-2.5" />
 
       {/* Daftar tips */}
-      <ul className="flex flex-1 flex-col justify-around list-disc space-y-1 pl-3.5 text-[11px] leading-tight text-[#211B55] sm:pl-4 sm:text-[11.5px] lg:text-[12px] xl:text-[12.5px] lg:leading-snug">
+        <ul className="list-disc space-y-0.5 pl-3.5 text-[11px] leading-tight text-[#211B55] sm:space-y-1 sm:pl-4 sm:text-[11.5px] lg:text-[12px] xl:text-[12.5px] lg:leading-snug">
         {tip.items.map((item) => (
           <li key={item.label}>
             <span className="font-bold">{item.label} :</span> {item.text}
@@ -177,24 +174,24 @@ function TipCardDesktop({ tip }: { tip: (typeof tips)[number] }) {
 
 function TipCardMobile({ tip }: { tip: (typeof tips)[number] }) {
   return (
-    <article className="flex h-full w-full items-center rounded-xl border-[1.8px] border-[#211B55] bg-[#DCE9FC] px-3 py-2 text-[#211B55] sm:px-4 sm:py-3">
+    <article className="flex h-full w-full items-center rounded-xl border-[1.8px] border-[#211B55] bg-[#DCE9FC] px-3.5 py-2.5 text-[#211B55] sm:px-4 sm:py-3">
       {/* Ikon di pinggir */}
-      <div className="flex w-11 shrink-0 items-center justify-center text-[#211B55] sm:w-14">
+       <div className="flex w-12 shrink-0 items-center justify-center text-[#211B55] sm:w-14">
         <TipIcon
           type={tip.icon}
-          className="h-9 w-9 shrink-0 sm:h-11 sm:w-11"
+          className="h-11 w-11 shrink-0 sm:h-12 sm:w-12"
         />
       </div>
 
       {/* Garis pemisah vertikal */}
-      <div className="mx-2 h-20 w-[1.5px] shrink-0 bg-[#211B55] sm:mx-3.5 sm:h-24" />
+      <div className="mx-2.5 h-16 w-[1.5px] shrink-0 bg-[#211B55] sm:mx-3.5 sm:h-20" />
 
       {/* Konten teks */}
       <div className="flex min-w-0 flex-1 flex-col justify-center">
         <h3 className="mb-1 text-center text-xs font-bold leading-tight text-[#211B55] sm:text-[13.5px]">
           {tip.title}
         </h3>
-        <ul className="list-disc space-y-0.5 pl-3.5 text-[10.5px] leading-tight text-[#211B55] sm:space-y-1 sm:pl-4 sm:text-[12px]">
+        <ul className="list-disc space-y-0.5 pl-3.5 text-[11px] leading-[1.35] text-[#211B55] sm:space-y-1 sm:pl-4 sm:text-[12px]">
           {tip.items.map((item) => (
             <li key={item.label}>
               <span className="font-bold">{item.label} :</span> {item.text}
@@ -317,7 +314,7 @@ const TipsBanner = () => {
 
         {/* Carousel Viewport */}
         <div
-          className="h-[160px] min-h-0 w-full max-w-[1100px] min-w-0 overflow-hidden sm:h-[170px] md:h-full md:flex-1"
+          className="h-[155px] min-h-0 w-full min-w-0 overflow-hidden sm:h-[165px] md:h-full md:flex-1"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={() => setIsPaused(true)}
