@@ -13,8 +13,8 @@ const Hero = () => {
           </h1>
 
           <p className="mt-1.5 max-w-[480px] text-xs leading-relaxed text-[#6B7280] sm:mt-2 sm:text-sm md:mt-2.5 md:text-sm lg:text-base">
-            Jelajahi berbagai instansi dan perusahaan yang menerima PKL sesuai
-            jurusan yang kamu miliki.
+            Jelajahi berbagai pilihan tempat PKL dan bandingkan informasi
+            untuk menemukan tempat yang tepat untukmu.
           </p>
 
           {/* Button — visible on desktop only */}
