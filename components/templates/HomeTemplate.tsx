@@ -90,7 +90,7 @@ const HomeTemplate = async () => {
 
   return (
     <div className="w-full bg-white">
-      <section className="flex flex-col md:h-[calc(100vh-76px)] md:max-h-[calc(100vh-76px)]">
+      <section className="flex flex-col md:h-[calc(100vh-88px)] md:max-h-[calc(100vh-88px)]">
         <div className="w-full md:h-1/2 md:min-h-0">
           <Hero />
         </div>
@@ -100,7 +100,7 @@ const HomeTemplate = async () => {
         </div>
       </section>
 
-      <section className="flex min-h-screen w-full flex-col justify-center md:min-h-[calc(100vh-76px)]">
+      <section className="flex min-h-screen w-full flex-col justify-center md:min-h-[calc(100vh-88px)]">
         <Recommendation companies={recommendationCompanies} />
       </section>
 
