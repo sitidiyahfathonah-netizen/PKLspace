@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -65,7 +64,7 @@ const tips = [
 
 function TipIcon({ type, className }: { type: string; className?: string }) {
   const defaultClasses =
-    "h-10 w-10 sm:h-11 sm:w-11 lg:h-12 lg:w-12 xl:w-14 xl:h-14 shrink-0";
+    "h-10 w-10 sm:h-11 sm:w-11 lg:h-12 lg:w-12 xl:h-14 xl:w-14 shrink-0";
   const iconClasses = className ?? defaultClasses;
 
   if (type === "pencil") {
@@ -153,7 +152,6 @@ function TipCardDesktop({ tip }: { tip: (typeof tips)[number] }) {
         <div className="flex shrink-0 items-center justify-center text-[#211B55]">
           <TipIcon type={tip.icon} />
         </div>
-
         <h3 className="mt-1 flex min-h-[26px] shrink-0 items-center justify-center text-center text-xs font-bold leading-tight sm:text-[13px] md:text-sm lg:text-[15px]">
           {tip.title}
         </h3>
@@ -193,7 +191,6 @@ function TipCardMobile({ tip }: { tip: (typeof tips)[number] }) {
         <h3 className="mb-1 text-center text-xs font-bold leading-tight text-[#211B55] sm:text-[13.5px]">
           {tip.title}
         </h3>
-
         <ul className="list-disc space-y-0.5 pl-3.5 text-[11px] leading-[1.35] text-[#211B55] sm:space-y-1 sm:pl-4 sm:text-[12px]">
           {tip.items.map((item) => (
             <li key={item.label}>
@@ -269,7 +266,6 @@ const TipsBanner = () => {
         ];
 
   const totalReal = realSlides.length;
-
   // Clone slide pertama di akhir untuk infinite carousel loop yang mulus
   const trackSlides = [...realSlides, <ImageSlide key="clone-image" />];
   const trackCount = trackSlides.length;
@@ -310,11 +306,9 @@ const TipsBanner = () => {
         {/* Heading */}
         <div className="mb-2.5 flex shrink-0 items-center justify-center gap-2 sm:mb-3 sm:gap-4 md:gap-5">
           <div className="h-[2px] w-8 rounded-full bg-[#64748B] sm:w-14 md:w-16 lg:w-20" />
-
           <h2 className="text-center text-sm font-bold tracking-wide text-[#1E1B4B] sm:text-base md:text-lg lg:text-xl">
             Tips Singkat Untuk PKL
           </h2>
-
           <div className="h-[2px] w-8 rounded-full bg-[#64748B] sm:w-14 md:w-16 lg:w-20" />
         </div>
 
