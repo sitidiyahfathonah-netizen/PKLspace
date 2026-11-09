@@ -14,59 +14,49 @@ type Company = {
   slug?: string;
 };
 
-const majors = [
-  "Pengembangan Perangkat Lunak dan Gim",
-  "Akuntansi dan Keuangan Lembaga",
-  "Manajemen Perkantoran dan Layanan Bisnis",
-  "Pemasaran",
-];
-
-type RecommendationProps = {
-  companies: Company[];
-};
-
-const getMajorKeywords = (major: string): string[] => {
-  const value = major.toLowerCase().trim();
-
-  if (
-    value.includes("pengembangan perangkat lunak") ||
-    value.includes("gim") ||
-    value === "pplg" ||
-    value === "rpl"
-  ) {
-    return [
+const MAJORS = [
+  {
+    code: "AKL",
+    name: "Akuntansi Lembaga Keuangan",
+    filterKeywords: [
+      "akl",
+      "akuntansi dan keuangan lembaga",
+      "akuntansi lembaga keuangan",
+      "akuntansi",
+      "keuangan lembaga",
+    ],
+  },
+  {
+    code: "MPLB",
+    name: "Manajemen Perkantoran dan Layanan Bisnis",
+    filterKeywords: [
+      "mplb",
+      "manajemen perkantoran dan layanan bisnis",
+      "manajemen perkantoran",
+      "layanan bisnis",
+    ],
+  },
+  {
+    code: "PM",
+    name: "Pemasaran",
+    filterKeywords: ["pm", "pemasaran"],
+  },
+  {
+    code: "PPLG",
+    name: "Pengembangan Perangkat Lunak dan Gim",
+    filterKeywords: [
       "pplg",
       "pengembangan perangkat lunak dan gim",
       "rekayasa perangkat lunak",
       "perangkat lunak",
       "rpl",
       "gim",
-    ];
-  }
+    ],
+  },
+];
 
-  if (value.includes("akuntansi") || value === "akl") {
-    return [
-      "akl",
-      "akuntansi dan keuangan lembaga",
-      "akuntansi lembaga keuangan",
-      "keuangan lembaga",
-    ];
-  }
-
-  if (value.includes("manajemen perkantoran") || value === "mplb") {
-    return [
-      "mplb",
-      "manajemen perkantoran dan layanan bisnis",
-      "manajemen perkantoran",
-      "layanan bisnis",
-    ];
-  }
-
-  if (value.includes("pemasaran") || value === "pm") {
-    return ["pm", "pemasaran"];
-  }
-
-  return [value];
+type RecommendationProps = {
+  companies: Company[];
 };
 
 const matchesMajor = (text: string, keywords: string[]): boolean => {
@@ -99,21 +89,14 @@ const Recommendation = ({ companies }: RecommendationProps) => {
   const [activeMajor, setActiveMajor] = useState(0);
   const [scrollRatio, setScrollRatio] = useState(0);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const cardContainerRef = useRef<HTMLDivElement>(null);
-  const isChangingMajor = useRef(false);
-  const navigationDirection = useRef<"next" | "previous" | "dot" | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const resistanceAccumulator = useRef(0);
-  const resistanceResetTimer = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
-
-  const touchStartX = useRef(0);
-  const isTouching = useRef(false);
-
-  const selectedMajor = majors[activeMajor];
-  const keywords = getMajorKeywords(selectedMajor);
+  const currentMajor = MAJORS[activeMajor];
+  const selectedMajor = currentMajor.name;
+  const keywords = currentMajor.filterKeywords;
 
   const recommendedCompanies = companies.filter((company) => {
     const allCompanyMajors = [company.major, ...(company.majors ?? [])].filter(
@@ -155,166 +138,126 @@ const Recommendation = ({ companies }: RecommendationProps) => {
     setActiveCardIndex(closestIdx);
   }, []);
 
+  // Tutup dropdown saat klik di luar atau tekan Escape
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isDropdownOpen]);
+
+  // Reset scroll container saat jurusan berganti
   useEffect(() => {
     const container = cardContainerRef.current;
     if (!container) return;
 
-    const direction = navigationDirection.current;
-
     container.scrollTo({
-      left: direction === "previous" ? container.scrollWidth : 0,
+      left: 0,
       behavior: "auto",
     });
 
-    resistanceAccumulator.current = 0;
-
     requestAnimationFrame(() => {
       handleScrollMetrics();
-      isChangingMajor.current = false;
     });
   }, [activeMajor, handleScrollMetrics, recommendedCompanies.length]);
 
-  const changeMajor = useCallback(
-    (direction: "next" | "previous") => {
-      if (isChangingMajor.current) return;
-
-      if (direction === "next" && activeMajor < majors.length - 1) {
-        isChangingMajor.current = true;
-        navigationDirection.current = "next";
-        setActiveMajor((prev) => prev + 1);
-      } else if (direction === "previous" && activeMajor > 0) {
-        isChangingMajor.current = true;
-        navigationDirection.current = "previous";
-        setActiveMajor((prev) => prev - 1);
-      }
-    },
-    [activeMajor],
-  );
+  const handleMajorClick = (index: number) => {
+    if (index === activeMajor) return;
+    setActiveMajor(index);
+    setIsDropdownOpen(false);
+  };
 
   const handleScroll = () => {
     handleScrollMetrics();
   };
 
-  useEffect(() => {
-    const container = cardContainerRef.current;
-    if (!container) return;
-
-    const RESISTANCE_THRESHOLD = 150;
-
-    const handleWheel = (e: WheelEvent) => {
-      if (isChangingMajor.current) return;
-
-      const { scrollLeft, scrollWidth, clientWidth } = container;
-      const isAtEnd = scrollLeft + clientWidth >= scrollWidth - 6;
-      const isAtStart = scrollLeft <= 6;
-
-      const delta =
-        Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-
-      if (delta > 0 && isAtEnd && activeMajor < majors.length - 1) {
-        e.preventDefault();
-        resistanceAccumulator.current += delta;
-
-        if (resistanceResetTimer.current) {
-          clearTimeout(resistanceResetTimer.current);
-        }
-
-        if (resistanceAccumulator.current >= RESISTANCE_THRESHOLD) {
-          changeMajor("next");
-        } else {
-          resistanceResetTimer.current = setTimeout(() => {
-            resistanceAccumulator.current = 0;
-          }, 280);
-        }
-      } else if (delta < 0 && isAtStart && activeMajor > 0) {
-        e.preventDefault();
-        resistanceAccumulator.current += Math.abs(delta);
-
-        if (resistanceResetTimer.current) {
-          clearTimeout(resistanceResetTimer.current);
-        }
-
-        if (resistanceAccumulator.current >= RESISTANCE_THRESHOLD) {
-          changeMajor("previous");
-        } else {
-          resistanceResetTimer.current = setTimeout(() => {
-            resistanceAccumulator.current = 0;
-          }, 280);
-        }
-      }
-    };
-
-    container.addEventListener("wheel", handleWheel, { passive: false });
-
-    return () => {
-      container.removeEventListener("wheel", handleWheel);
-
-      if (resistanceResetTimer.current) {
-        clearTimeout(resistanceResetTimer.current);
-      }
-    };
-  }, [activeMajor, changeMajor]);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    isTouching.current = true;
-    resistanceAccumulator.current = 0;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    const container = cardContainerRef.current;
-
-    if (!container || isChangingMajor.current || !isTouching.current) {
-      return;
-    }
-
-    const currentX = e.touches[0].clientX;
-    const deltaX = touchStartX.current - currentX;
-
-    const isAtEnd =
-      container.scrollLeft + container.clientWidth >= container.scrollWidth - 8;
-    const isAtStart = container.scrollLeft <= 8;
-
-    const TOUCH_RESISTANCE = 95;
-
-    if (deltaX > 0 && isAtEnd && activeMajor < majors.length - 1) {
-      if (deltaX >= TOUCH_RESISTANCE) {
-        isTouching.current = false;
-        changeMajor("next");
-      }
-    } else if (deltaX < 0 && isAtStart && activeMajor > 0) {
-      if (Math.abs(deltaX) >= TOUCH_RESISTANCE) {
-        isTouching.current = false;
-        changeMajor("previous");
-      }
-    }
-  };
-
-  const handleTouchEnd = () => {
-    isTouching.current = false;
-    resistanceAccumulator.current = 0;
-  };
-
-  const handleMajorClick = (index: number) => {
-    if (index === activeMajor) return;
-
-    isChangingMajor.current = true;
-    navigationDirection.current = index > activeMajor ? "next" : "previous";
-    setActiveMajor(index);
-  };
-
   return (
     <section className="flex w-full items-center justify-center bg-white px-4 py-8 sm:px-8 sm:py-10 md:py-12">
       <div className="mx-auto w-full max-w-[1200px]">
-        <div className="mb-4 text-center sm:mb-6 md:text-left">
-          <h2 className="text-xl font-bold text-[#243B82] sm:text-2xl md:text-3xl">
-            Rekomendasi Tempat PKL
-          </h2>
-          <p className="mt-1 text-sm text-[#7A7F8C] sm:mt-2 sm:text-base">
-            berdasarkan jurusanmu
-          </p>
+        {/* Header Rekomendasi & Filter Dropdown Jurusan */}
+        <div className="mb-4 flex items-start justify-between sm:mb-6">
+          <div className="text-left">
+            <h2 className="text-xl font-bold text-[#243B82] sm:text-2xl md:text-3xl">
+              Rekomendasi Tempat PKL
+            </h2>
+            <p className="mt-1 text-sm text-[#7A7F8C] sm:mt-2 sm:text-base">
+              berdasarkan jurusanmu
+            </p>
+          </div>
+
+          {/* Filter Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              type="button"
+              onClick={() => setIsDropdownOpen((prev) => !prev)}
+              className="flex items-center gap-2 rounded-lg border border-[#A7B9D2] bg-white px-3.5 py-1.5 text-sm font-medium text-[#4A607A] transition-colors hover:border-[#5274C7] sm:px-4 sm:py-2 sm:text-base"
+              aria-expanded={isDropdownOpen}
+              aria-haspopup="listbox"
+            >
+              <span>{MAJORS[activeMajor].code}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={`h-4 w-4 text-[#8A9BB4] transition-transform duration-200 ${
+                  isDropdownOpen ? "rotate-180" : ""
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            {/* Pop Up Menu sesuai desain */}
+            {isDropdownOpen && (
+              <div className="absolute right-0 top-full z-30 mt-1.5 w-full min-w-[96px] overflow-hidden rounded-xl border border-[#9FB0C8] bg-white shadow-md">
+                {MAJORS.map((item, index) => (
+                  <button
+                    key={item.code}
+                    type="button"
+                    onClick={() => handleMajorClick(index)}
+                    className={`block w-full border-b border-[#9FB0C8] py-2 text-center text-sm font-medium transition-colors last:border-b-0 hover:bg-[#F0F5FF] ${
+                      activeMajor === index
+                        ? "bg-[#F0F5FF]/60 font-semibold text-[#243B82]"
+                        : "text-[#5B7293]"
+                    }`}
+                  >
+                    {item.code}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
+        {/* Card Container Rekomendasi */}
         <div className="relative overflow-hidden rounded-2xl border-2 border-[#5274C7] bg-[#EAF0FF] px-4 py-6 sm:px-8 sm:py-8 lg:px-10">
           <div className="mb-4 text-left sm:mb-6">
             <h3 className="text-base font-bold text-[#1D376F] sm:text-xl">
@@ -325,9 +268,6 @@ const Recommendation = ({ companies }: RecommendationProps) => {
           <div
             ref={cardContainerRef}
             onScroll={handleScroll}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
             className="no-scrollbar flex w-full items-center gap-4 overflow-x-auto scroll-smooth px-1 pb-2 sm:gap-6 sm:px-2 snap-x snap-mandatory sm:snap-none"
             style={{
               scrollbarWidth: "none",
@@ -393,10 +333,11 @@ const Recommendation = ({ companies }: RecommendationProps) => {
             )}
           </div>
 
+          {/* Scroll progress bar bawah (hanya 1 scrollbar seperti pada desain) */}
           <div className="mt-4 sm:mt-6">
-            <div className="relative h-2 w-full overflow-hidden rounded-full bg-[#CAD6F1]">
+            <div className="relative h-2.5 sm:h-3 w-full overflow-hidden rounded-full bg-[#CBD7E8]">
               <div
-                className="absolute top-0 bottom-0 rounded-full bg-[#6B85C4] transition-all duration-150 ease-out"
+                className="absolute top-0 bottom-0 rounded-full bg-[#687F9E] transition-all duration-150 ease-out"
                 style={{
                   width: "35%",
                   left: `${scrollRatio * (100 - 35)}%`,
@@ -404,22 +345,6 @@ const Recommendation = ({ companies }: RecommendationProps) => {
               />
             </div>
           </div>
-        </div>
-
-        <div className="mt-4 flex justify-center gap-2 sm:mt-5">
-          {majors.map((major, index) => (
-            <button
-              key={major}
-              type="button"
-              onClick={() => handleMajorClick(index)}
-              aria-label={`Pilih jurusan ${major}`}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                index === activeMajor
-                  ? "w-7 bg-[#31559F]"
-                  : "w-2 bg-[#AAB8DD] hover:bg-[#8FA5D8]"
-              }`}
-            />
-          ))}
         </div>
       </div>
     </section>
