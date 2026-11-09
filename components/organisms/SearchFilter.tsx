@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchBar from "../molecules/SearchBar";
 
 const majors = [
@@ -60,6 +60,26 @@ const SearchFilter = ({
     setShowFilter(false);
   };
 
+  const handleCloseFilter = () => {
+    setShowFilter(false);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setShowFilter(false);
+      }
+    };
+
+    if (showFilter) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [showFilter]);
+
   return (
     <>
       {/* Search */}
@@ -78,17 +98,51 @@ const SearchFilter = ({
 
       {/* Popup Filter */}
       {showFilter && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4">
-          <div className="w-full max-w-[550px] rounded-xl border-2 border-[#39339A] bg-white p-6 shadow-xl">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 transition-opacity"
+          onClick={handleCloseFilter}
+        >
+          <div
+            className="w-full max-w-[420px] rounded-2xl border-2 border-[#1E254B] bg-white p-6 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header: Judul Filter Jurusan & Tombol Close (X) */}
+            <div className="flex items-center justify-between pb-2">
+              <h2 className="text-xl font-bold text-[#1E254B]">
+                Filter Jurusan
+              </h2>
+              <button
+                type="button"
+                onClick={handleCloseFilter}
+                className="flex h-8 w-8 items-center justify-center rounded-lg text-[#1E254B] transition-colors hover:bg-slate-100"
+                aria-label="Tutup filter"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
             {/* Pilihan Jurusan */}
-            <div className="space-y-5">
+            <div className="my-5 space-y-4">
               {majors.map((major) => {
                 const isSelected = filterMajor === major.value;
 
                 return (
                   <label
                     key={major.value}
-                    className="flex cursor-pointer items-center gap-5"
+                    className="group flex cursor-pointer select-none items-center gap-4"
                   >
                     <input
                       type="checkbox"
@@ -100,8 +154,10 @@ const SearchFilter = ({
                     />
 
                     <span
-                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-[#39339A] ${
-                        isSelected ? "bg-[#39339A]" : "bg-white"
+                      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border-2 transition-colors ${
+                        isSelected
+                          ? "border-[#1E254B] bg-[#1E254B]"
+                          : "border-[#7B8FA6] bg-white group-hover:border-[#1E254B]"
                       }`}
                     >
                       {isSelected && (
@@ -110,8 +166,8 @@ const SearchFilter = ({
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="white"
-                          strokeWidth="3"
-                          className="h-7 w-7"
+                          strokeWidth={3}
+                          className="h-4 w-4"
                         >
                           <path
                             strokeLinecap="round"
@@ -122,7 +178,7 @@ const SearchFilter = ({
                       )}
                     </span>
 
-                    <span className="text-2xl font-semibold text-[#211B55]">
+                    <span className="text-lg font-bold text-[#1E254B]">
                       {major.label}
                     </span>
                   </label>
@@ -130,28 +186,24 @@ const SearchFilter = ({
               })}
             </div>
 
-            {/* Judul */}
-            <h2 className="mt-7 text-2xl font-semibold text-[#211B55]">
-              Filter Jurusan
-            </h2>
+            {/* Tombol Terapkan & Reset */}
+            <div className="space-y-3 pt-2">
+              <button
+                type="button"
+                onClick={handleApplyFilter}
+                className="w-full rounded-xl border-2 border-[#1E254B] bg-white py-3 text-center text-lg font-bold text-[#1E254B] transition hover:bg-[#F0F5FF] active:scale-[0.99]"
+              >
+                Terapkan
+              </button>
 
-            {/* Terapkan */}
-            <button
-              type="button"
-              onClick={handleApplyFilter}
-              className="mt-6 w-full rounded-xl border-2 border-[#39339A] bg-white px-6 py-3 text-2xl font-semibold text-[#39339A] transition hover:bg-[#F0F0FF]"
-            >
-              Terapkan
-            </button>
-
-            {/* Reset */}
-            <button
-              type="button"
-              onClick={handleResetFilter}
-              className="mt-5 w-full rounded-xl border-2 border-[#39339A] bg-white px-6 py-3 text-2xl font-semibold text-[#39339A] transition hover:bg-[#F0F0FF]"
-            >
-              Reset Filter
-            </button>
+              <button
+                type="button"
+                onClick={handleResetFilter}
+                className="w-full rounded-xl border-2 border-[#1E254B] bg-white py-3 text-center text-lg font-bold text-[#1E254B] transition hover:bg-[#F0F5FF] active:scale-[0.99]"
+              >
+                Reset Filter
+              </button>
+            </div>
           </div>
         </div>
       )}
